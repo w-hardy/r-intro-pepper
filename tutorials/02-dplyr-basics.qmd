@@ -27,3 +27,4 @@ summary_tbl <- df |>
   arrange(desc(mean_value))
 
 summary_tbl
+```

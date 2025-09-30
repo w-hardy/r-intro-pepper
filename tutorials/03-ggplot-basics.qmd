@@ -23,3 +23,4 @@ summary_tbl |>
     title = "Mean by group"
   ) +
   theme_minimal()
+```

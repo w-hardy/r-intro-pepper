@@ -31,3 +31,4 @@ dat |>
 Copy code
 # Model summary and basic diagnostics
 broom::glance(fit)
+```

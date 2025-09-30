@@ -12,3 +12,4 @@ library(tidyverse)
 tib <- tibble(x = 1:5, y = x^2)
 tib |>
   summarise(mean_x = mean(x), mean_y = mean(y))
+```

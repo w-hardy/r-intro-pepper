@@ -4,7 +4,7 @@ project:
 
 book:
   title: "PEPPER: Introduction to R"
-  author: "PEPPER Research Group"
+  author: "Will Hardy"
   date: today
   chapters:
     - index.qmd
@@ -21,7 +21,7 @@ format:
     theme:
       light: cosmo
     toc: true
-    number-sections: false
+    number-sections: true
     css: styles.scss
 
 execute:
