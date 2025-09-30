@@ -1,0 +1,32 @@
+# RStudio project files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Quarto output and caches
+_site/
+_freeze/
+.quarto/
+.cache/
+
+# Compiled book artifacts (PDF/EPUB if rendered)
+*.pdf
+*.epub
+
+# Package management
+renv/
+renv.lock
+packrat/
+.packrat/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE settings
+.vscode/
+.idea/
+
+# Misc
+*.log
