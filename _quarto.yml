@@ -20,6 +20,10 @@ format:
   html:
     theme:
       light: cosmo
+    code-copy: true
+    code-tools:
+      source: false
+      toggle: false
     toc: true
     number-sections: true
     css: styles.scss
