@@ -1,0 +1,14 @@
+---
+title: "R and Quarto: quick start"
+---
+
+This tutorial confirms your setup and shows how to run code chunks.
+
+```{r}
+#| message: false
+# Base pipe with tidyverse conventions
+library(tidyverse)
+
+tib <- tibble(x = 1:5, y = x^2)
+tib |>
+  summarise(mean_x = mean(x), mean_y = mean(y))

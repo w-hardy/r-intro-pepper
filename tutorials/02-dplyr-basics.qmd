@@ -1,0 +1,29 @@
+---
+title: "Data manipulation with dplyr"
+---
+
+We will create a small data frame and compute grouped summaries.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(janitor)
+
+df <- tibble(
+  id = 1:8,
+  group = c("A","A","B","B","B","A","C","C"),
+  value = c(3, 5, 2, 9, 4, 6, 1, 7)
+) |>
+  clean_names()
+
+summary_tbl <- df |>
+  group_by(group) |>
+  summarise(
+    n = n(),
+    mean_value = mean(value),
+    sd_value = sd(value),
+    .groups = "drop"
+  ) |>
+  arrange(desc(mean_value))
+
+summary_tbl

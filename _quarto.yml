@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: _site
+
+book:
+  title: "PEPPER: Introduction to R"
+  author: "PEPPER Research Group"
+  date: today
+  chapters:
+    - index.qmd
+    - tutorials/01-intro.qmd
+    - tutorials/02-dplyr-basics.qmd
+    - tutorials/03-ggplot-basics.qmd
+    - tutorials/04-lm-basics.qmd
+  page-navigation: true
+  sidebar:
+    search: true
+
+format:
+  html:
+    theme:
+      light: cosmo
+    toc: true
+    number-sections: false
+    css: styles.scss
+
+execute:
+  freeze: auto

@@ -1,0 +1,7 @@
+---
+title: "Welcome"
+---
+
+This site contains short, practical tutorials to help PEPPER group members build skills in R using **RStudio** and tidyverse-style code with the **base R pipe** `|>`.
+
+Start with the first chapter or browse all tutorials from the sidebar.

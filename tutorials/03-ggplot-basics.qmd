@@ -1,0 +1,25 @@
+---
+title: "Visualisation with ggplot2"
+---
+
+We will plot the grouped means from the previous tutorial.
+
+```{r}
+#| message: false
+library(tidyverse)
+
+summary_tbl <- tibble(
+  group = c("A","B","C"),
+  mean_value = c(4.67, 5.00, 4.00)
+)
+
+summary_tbl |>
+  ggplot(aes(x = group, y = mean_value)) +
+  geom_col() +
+  geom_text(aes(label = round(mean_value, 2)), vjust = -0.4) +
+  labs(
+    x = "Group",
+    y = "Mean value",
+    title = "Mean by group"
+  ) +
+  theme_minimal()
