@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "PEPPER: Introduction to R",
     "section": "",
-    "text": "This site contains short, practical tutorials to help PEPPER group members build skills in R using RStudio and tidyverse-style code with the base R pipe |&gt;.\nStart with the first chapter or browse all tutorials from the sidebar.",
+    "text": "This site contains short, practical tutorials to help PEPPER group members build skills in R using RStudio and tidyverse packages in [tidyverse-style code](https://style.tidyverse.org/. Here is a useful guide to installing R and RStudio.\nWorking through the tutorials here may be useful for those new to R, particually in preparation for working through the R for Health Technology Assessment text book if the contents of Chapter 2: Introduction to R is new.\nStart with the first chapter or browse all tutorials from the sidebar.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
     ]
@@ -12,9 +12,9 @@
   {
     "objectID": "tutorials/01-intro.html",
     "href": "tutorials/01-intro.html",
-    "title": "R and Quarto: quick start",
+    "title": "2  R and Quarto: quick start",
     "section": "",
-    "text": "This tutorial confirms your setup and shows how to run code chunks.\n#| message: false # Base pipe with tidyverse conventions library(tidyverse)\ntib &lt;- tibble(x = 1:5, y = x^2) tib |&gt; summarise(mean_x = mean(x), mean_y = mean(y))",
+    "text": "This tutorial confirms your setup and shows how to run code chunks.\n\n# Base pipe with tidyverse conventions\nlibrary(tidyverse)\n\ntib &lt;- tibble(x = 1:5, y = x^2)\ntib |&gt;\n  summarise(mean_x = mean(x), mean_y = mean(y))\n\n# A tibble: 1 × 2\n  mean_x mean_y\n   &lt;dbl&gt;  &lt;dbl&gt;\n1      3     11",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R and Quarto: quick start</span>"
     ]
@@ -22,9 +22,9 @@
   {
     "objectID": "tutorials/02-dplyr-basics.html",
     "href": "tutorials/02-dplyr-basics.html",
-    "title": "Data manipulation with dplyr",
+    "title": "3  Data manipulation with dplyr",
     "section": "",
-    "text": "We will create a small data frame and compute grouped summaries.\n#| message: false library(tidyverse) library(janitor)\ndf &lt;- tibble( id = 1:8, group = c(“A”,“A”,“B”,“B”,“B”,“A”,“C”,“C”), value = c(3, 5, 2, 9, 4, 6, 1, 7) ) |&gt; clean_names()\nsummary_tbl &lt;- df |&gt; group_by(group) |&gt; summarise( n = n(), mean_value = mean(value), sd_value = sd(value), .groups = “drop” ) |&gt; arrange(desc(mean_value))\nsummary_tbl",
+    "text": "We will create a small data frame and compute grouped summaries.\n\nlibrary(tidyverse)\nlibrary(janitor)\n\ndf &lt;- tibble(\n  id = 1:8,\n  group = c(\"A\",\"A\",\"B\",\"B\",\"B\",\"A\",\"C\",\"C\"),\n  value = c(3, 5, 2, 9, 4, 6, 1, 7)\n) |&gt;\n  clean_names()\n\nsummary_tbl &lt;- df |&gt;\n  group_by(group) |&gt;\n  summarise(\n    n = n(),\n    mean_value = mean(value),\n    sd_value = sd(value),\n    .groups = \"drop\"\n  ) |&gt;\n  arrange(desc(mean_value))\n\nsummary_tbl\n\n# A tibble: 3 × 4\n  group     n mean_value sd_value\n  &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;\n1 B         3       5        3.61\n2 A         3       4.67     1.53\n3 C         2       4        4.24",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
     ]
@@ -32,9 +32,9 @@
   {
     "objectID": "tutorials/03-ggplot-basics.html",
     "href": "tutorials/03-ggplot-basics.html",
-    "title": "Visualisation with ggplot2",
+    "title": "4  Visualisation with ggplot2",
     "section": "",
-    "text": "We will plot the grouped means from the previous tutorial.\n#| message: false library(tidyverse)\nsummary_tbl &lt;- tibble( group = c(“A”,“B”,“C”), mean_value = c(4.67, 5.00, 4.00) )\nsummary_tbl |&gt; ggplot(aes(x = group, y = mean_value)) + geom_col() + geom_text(aes(label = round(mean_value, 2)), vjust = -0.4) + labs( x = “Group”, y = “Mean value”, title = “Mean by group” ) + theme_minimal()",
+    "text": "We will plot the grouped means from the previous tutorial.\n\nlibrary(tidyverse)\n\nsummary_tbl &lt;- tibble(\n  group = c(\"A\",\"B\",\"C\"),\n  mean_value = c(4.67, 5.00, 4.00)\n)\n\nsummary_tbl |&gt;\n  ggplot(aes(x = group, y = mean_value)) +\n  geom_col() +\n  geom_text(aes(label = round(mean_value, 2)), vjust = -0.4) +\n  labs(\n    x = \"Group\",\n    y = \"Mean value\",\n    title = \"Mean by group\"\n  ) +\n  theme_minimal()",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
     ]
@@ -42,9 +42,9 @@
   {
     "objectID": "tutorials/04-lm-basics.html",
     "href": "tutorials/04-lm-basics.html",
-    "title": "Linear models: a minimal example",
+    "title": "5  Linear models: a minimal example",
     "section": "",
-    "text": "Fit and interpret a simple linear model.\n#| message: false library(tidyverse) set.seed(1)\ndat &lt;- tibble( x = seq(0, 10, length.out = 50), y = 2 + 0.8 * x + rnorm(50, sd = 1.5) )\nfit &lt;- lm(y ~ x, data = dat) broom::tidy(fit) {r} Copy code # Visual check library(ggplot2)\ndat |&gt; ggplot(aes(x, y)) + geom_point() + geom_smooth(method = “lm”, se = TRUE) + labs(title = “Linear fit”, x = “x”, y = “y”) + theme_minimal() {r} Copy code # Model summary and basic diagnostics broom::glance(fit)",
+    "text": "Fit and interpret a simple linear model.\n\nlibrary(tidyverse)\nset.seed(1)\n\ndat &lt;- tibble(\n  x = seq(0, 10, length.out = 50),\n  y = 2 + 0.8 * x + rnorm(50, sd = 1.5)\n)\n\nfit &lt;- lm(y ~ x, data = dat)\nbroom::tidy(fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)    2.17     0.351       6.19 1.28e- 7\n2 x              0.795    0.0605     13.1  1.59e-17\n\n\n\n# Visual check\nlibrary(ggplot2)\n\ndat |&gt;\n  ggplot(aes(x, y)) +\n  geom_point() +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  labs(title = \"Linear fit\", x = \"x\", y = \"y\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n# Model summary and basic diagnostics\nbroom::glance(fit)\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.783         0.778  1.26      173. 1.59e-17     1  -81.5  169.  175.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
