@@ -16,8 +16,10 @@ dat <- tibble(
 
 fit <- lm(y ~ x, data = dat)
 broom::tidy(fit)
-{r}
-Copy code
+```
+
+
+```{r}
 # Visual check
 library(ggplot2)
 
@@ -27,8 +29,9 @@ dat |>
   geom_smooth(method = "lm", se = TRUE) +
   labs(title = "Linear fit", x = "x", y = "y") +
   theme_minimal()
-{r}
-Copy code
+```
+
+```{r}
 # Model summary and basic diagnostics
 broom::glance(fit)
 ```
