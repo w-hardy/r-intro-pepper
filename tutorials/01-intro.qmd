@@ -96,7 +96,7 @@ penguins |>
 Usually you will need to load your own data into R, this will need to be done each session. There are several ways of doing this, one of the most common ways to do so is using `read_csv()`
 
 ```{r}
-#| message: false
+#| eval: false
 
 my_data <- read_csv("data/my_file.csv")
 
