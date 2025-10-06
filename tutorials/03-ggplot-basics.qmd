@@ -1,15 +1,190 @@
 ---
-title: "DRAFT: Visualisation with ggplot2"
+title: "Visualisation with ggplot2"
 ---
 
-We will plot the grouped means from the previous tutorial.
+This chapter introduces the `ggplot2` package for building layered graphics. You will learn how to map variables to aesthetics,
+ add new layers, and customise the overall look of your plots. We will cover how to:
+
+1. Build a basic scatter plot using `ggplot()`
+2. Encode additional variables with colour and faceting
+3. Add statistical summaries and adjust labels for readability
+
+
+:::{.callout-note}
+This section assumes:
+
+* you have the `ggplot2` package loaded in your current session using `library(ggplot2)` or `library(tidyverse)`
+* your data are in tidy format with one row per observation and one column per variable
+:::
+
+We continue working with the `penguins` dataset.
 
 ```{r}
 #| message: false
-library(dplyr) # Data manipulation
 library(ggplot2) # Figures
 
-penguins |> 
-  ggplot(aes(x = species)) +
-  geom_boxplot(aes(y = bill_len))
+head(penguins)
 ```
+
+
+## Build a scatter plot
+
+Every `ggplot2` graphic starts with `ggplot(data, aes(...))`, followed by layers like `geom_point()`.
+
+::: {.panel-tabset}
+
+### Example
+
+We will explore the relationship between bill length and bill depth, colouring points by species.
+
+```{r}
+penguins |>
+  ggplot(aes(x = bill_dep, y = bill_len, colour = species)) +
+  geom_point()
+```
+
+### Exercise
+
+Create a scatter plot of flipper length versus body mass, colouring by island. Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |>
+  ggplot(aes(x = ____, y = ____, colour = ____)) +
+  geom_point()
+```
+
+:::{.callout-tip}
+Use informative axis labels when you share plots. `labs(x = "Flipper length (mm)", y = "Body mass (g)")` adds descriptive titles.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  ggplot(aes(x = flipper_len, y = body_mass, colour = island)) +
+  geom_point()
+```
+
+:::
+
+## Map aesthetics and facet
+
+Aesthetics control how data values appear on the plot. Facets split the data into small multiples for easier comparison.
+
+::: {.panel-tabset}
+
+### Example
+
+Here we map bill length to the `x` axis, flipper length to the `y` axis, colour by species, and break the plot into facets by island.
+
+```{r}
+penguins |>
+  ggplot(aes(x = bill_len, y = flipper_len, colour = species)) +
+  geom_point() +
+  facet_wrap(~ island)
+```
+
+### Exercise
+
+Make a plot of body mass versus bill depth, using point shape for species and faceting by sex. Replace the blanks below.
+
+```{r}
+#| eval: false
+
+penguins |>
+  ggplot(aes(x = ____, y = ____, shape = ____)) +
+  geom_point() +
+  facet_wrap(~ ____)
+```
+
+:::{.callout-tip}
+Not every variable works well as a shape or colour. Continuous variables often look clearer mapped to colour gradients via `scale_colour_viridis_c()`.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  ggplot(aes(x = body_mass, y = bill_dep, shape = species)) +
+  geom_point() +
+  facet_wrap(~ sex)
+```
+
+:::
+
+## Add summaries and labels
+
+You can layer statistical summaries and customise labels to communicate the key message.
+
+::: {.panel-tabset}
+
+### Example
+
+Below we add a smooth trend line with `geom_smooth()` and give the axes and legend clear labels.
+
+```{r}
+penguins |>
+  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "Body mass increases with flipper length",
+    x = "Flipper length (mm)",
+    y = "Body mass (g)",
+    colour = "Species"
+  ) +
+  theme_minimal()
+```
+
+### Exercise
+
+Add a line layer that connects the mean body mass by species. Start by summarising the data with `dplyr`, then add a `geom_line()` layer. Replace the blanks with the appropriate function names or variables.
+
+```{r}
+#| eval: false
+
+mean_mass <- penguins |>
+  group_by(species) |>
+  summarise(mean_mass = mean(___, na.rm = TRUE))
+
+penguins |>
+  ggplot(aes(x = species, y = body_mass)) +
+  geom_jitter(width = 0.2, alpha = 0.4) +
+  geom_line(data = mean_mass, aes(x = species, y = ____ , group = 1), colour = "#3366aa", linewidth = 1.2) +
+  labs(y = "Body mass (g)")
+```
+
+:::{.callout-note}
+When combining datasets in one plot, be explicit about aesthetics like `group` inside the layer where they apply.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+mean_mass <- penguins |>
+  group_by(species) |>
+  summarise(mean_mass = mean(body_mass, na.rm = TRUE))
+
+penguins |>
+  ggplot(aes(x = species, y = body_mass)) +
+  geom_jitter(width = 0.2, alpha = 0.4) +
+  geom_line(data = mean_mass, aes(x = species, y = mean_mass, group = 1), colour = "#3366aa", linewidth = 1.2) +
+  labs(y = "Body mass (g)")
+```
+
+:::
+
+## Next steps
+Now you know how to construct scatter plots, encode additional variables, and add summaries with `ggplot2`.
+Next, explore other geoms like `geom_histogram()` for distributions or `geom_col()` for totals.
