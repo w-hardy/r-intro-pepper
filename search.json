@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "PEPPER: Introduction to R",
     "section": "",
-    "text": "This site contains short, practical tutorials to help PEPPER group members build skills in R using RStudio and tidyverse packages in [tidyverse-style code](https://style.tidyverse.org/. Here is a useful guide to installing R and RStudio.\nWorking through the tutorials here may be useful for those new to R, particually in preparation for working through the R for Health Technology Assessment text book if the contents of Chapter 2: Introduction to R is new.\nStart with the first chapter or browse all tutorials from the sidebar.",
+    "text": "This site contains short, practical tutorials to help PEPPER group members build skills in R using RStudio and tidyverse packages in tidyverse-style code. Here is a useful guide to installing R and RStudio.\nWorking through the tutorials here may be useful for those new to R, particularly in preparation for working through the R for Health Technology Assessment text book if the contents of Chapter 2: Introduction to R is new. (R for Data Science)[https://r4ds.hadley.nz/] will provide a much more comprehensive instruction on using R.\n\n1 Using each chapter\nEach chapter will have an introduction and sections for different actions you may wish to carry out. For each action there will be three tabs: Example, Exercise, and Solution. The example will show you how to perform the task; the exercise will provide a template, with sections missing for you to fill in as practice; and the solution will provide the solution to the exercise so you can check (a) your code and (b) your output.\nStart with the first chapter or browse all tutorials from the sidebar.\n\n\n\n\n\n\nNote\n\n\n\nThese tutorials are not meant to be comprehensive and there will also be other ways to achieve the same goal. The intention is to help people start using R for their work and perhaps find common ways of performing regular tasks. This site should develop and grow over time.\n\n\n\n\n2 Issues\nIf there are problems with anything contained in this site, please add a “new issue” using the green button at https://github.com/w-hardy/r-intro-pepper/issues. This will allow me to keep track of them.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Welcome</span>"
     ]
@@ -12,11 +12,51 @@
   {
     "objectID": "tutorials/01-intro.html",
     "href": "tutorials/01-intro.html",
-    "title": "2  R and Quarto: quick start",
+    "title": "2  R: quick start",
     "section": "",
-    "text": "This tutorial confirms your setup and shows how to run code chunks.\n\n# Base pipe with tidyverse conventions\nlibrary(tidyverse)\n\ntib &lt;- tibble(x = 1:5, y = x^2)\ntib |&gt;\n  summarise(mean_x = mean(x), mean_y = mean(y))\n\n# A tibble: 1 × 2\n  mean_x mean_y\n   &lt;dbl&gt;  &lt;dbl&gt;\n1      3     11",
+    "text": "2.1 Installing and loading packages\nFor most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: dplyr for data manipulation, ggplot2 for creating plots, and broom for summarising statistical models. These are installed using the install.packages() function.1\ninstall.packages(c(\"readr\", \"dplyr\", \"ggplot2\", \"broom\"))\nYou will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:\nlibrary(readr) # For reading data\nlibrary(dplyr) # For data manipulation\nlibrary(ggplot2) # For creating plots",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R and Quarto: quick start</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/01-intro.html#installing-and-loading-packages",
+    "href": "tutorials/01-intro.html#installing-and-loading-packages",
+    "title": "2  R: quick start",
+    "section": "",
+    "text": "Note\n\n\n\nRunning the install.packages() function will also install dependencies for the packages you have requested\n\n\n\n\n\n\n\n\nTip\n\n\n\nYou only need to install each package once per version of R, but you must use library() every time you start a new R session.\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nAnything after # is ignored by R. Use comments to explain what your code does or why you made certain choices.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/01-intro.html#data",
+    "href": "tutorials/01-intro.html#data",
+    "title": "2  R: quick start",
+    "section": "2.2 Data",
+    "text": "2.2 Data\nFor more detail on importing data, see the R4DS chapter on data import.\n\n2.2.1 Preloaded data\nR comes with several datasets preloaded in the datasets package. These can be useful when you are learning new methods or to demonstrate things to others. For the tutorials on this site we will use the penguins dataset, R (4.5.0+) includes the penguins dataset, originally from the palmerpenguins package. The first five rows are below:\n\npenguins |&gt; \n  head(n = 5) # The head(n = 5) function shows the top five (n) rows of data\n\n\n  \n\n\n\nand the last four rows are below:\n\npenguins |&gt; \n  tail(n = 4) # The tail(n = 4) function shows the bottom four (n) rows of data\n\n\n  \n\n\n\n\n\n\n\n\n\nTip\n\n\n\nUse glimpse(penguins) to quickly see variable names, types, and example values.\n\n\nWe can see that we have different types of data in each column.\n\nspecies, island, and sex are factors\nbill_len and bill_dep are doubles (numeric variables with decimals)\nflipper_len, body_mass, and year are integers\n\n\n\n\n\n\n\nNote\n\n\n\nThe pipe operator |&gt; essentially passes the object on the left to the right, this could be one one line\npenguins |&gt; head()\nor it might be on multiple lines\npenguins |&gt; \n  head()\n\n\n\n\n2.2.2 Load your own\nUsually you will need to load your own data into R, this will need to be done each session. There are several ways of doing this, one of the most common ways to do so is using read_csv()\n\nmy_data &lt;- read_csv(\"data/my_file.csv\")\n\nhead(my_data)\n\n\n\n\n\n\n\nTip\n\n\n\nMake sure the file path is correct and that you’ve set your working directory to where the file is saved.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/01-intro.html#next-chapter",
+    "href": "tutorials/01-intro.html#next-chapter",
+    "title": "2  R: quick start",
+    "section": "2.3 Next chapter",
+    "text": "2.3 Next chapter\nNow that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/01-intro.html#footnotes",
+    "href": "tutorials/01-intro.html#footnotes",
+    "title": "2  R: quick start",
+    "section": "",
+    "text": "You can install multiple packages using one function call by using the c() operator to chain the packages together. Remember to use quote marks ‘“’ around each package name.↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
     ]
   },
   {
@@ -24,7 +64,57 @@
     "href": "tutorials/02-dplyr-basics.html",
     "title": "3  Data manipulation with dplyr",
     "section": "",
-    "text": "We will create a small data frame and compute grouped summaries.\n\nlibrary(tidyverse)\nlibrary(janitor)\n\ndf &lt;- tibble(\n  id = 1:8,\n  group = c(\"A\",\"A\",\"B\",\"B\",\"B\",\"A\",\"C\",\"C\"),\n  value = c(3, 5, 2, 9, 4, 6, 1, 7)\n) |&gt;\n  clean_names()\n\nsummary_tbl &lt;- df |&gt;\n  group_by(group) |&gt;\n  summarise(\n    n = n(),\n    mean_value = mean(value),\n    sd_value = sd(value),\n    .groups = \"drop\"\n  ) |&gt;\n  arrange(desc(mean_value))\n\nsummary_tbl\n\n# A tibble: 3 × 4\n  group     n mean_value sd_value\n  &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;\n1 B         3       5        3.61\n2 A         3       4.67     1.53\n3 C         2       4        4.24",
+    "text": "3.1 New variables\nUse mutate() to create new variables or modify existing ones. Here we estimate a rough “bill volume” from the existing bill dimensions.\nWe have two variables about the penguin’s bills: bill_len and bill_dep. We want to calculate a volume of each penguins bill. For now, we will assume that their bills are twice as deep as they are wide (and they are perfect cuboids!). First we want to create a variable that is their bill width and then we want to calculate the volume.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/02-dplyr-basics.html#new-variables",
+    "href": "tutorials/02-dplyr-basics.html#new-variables",
+    "title": "3  Data manipulation with dplyr",
+    "section": "",
+    "text": "ExampleExerciseSolution\n\n\nThe code below will create a new column at the end of the data called bill_wid. Next you will extend this to calculate the volume of the bill, creating the variable bill_vol.\n\npenguins |&gt; \n  mutate(bill_wid = 0.5 * bill_dep)\n\n\n  \n\n\n\n\n\nTry creating both bill_wid and bill_vol in one step. Replace the blanks with the correct variable names.\n\npenguins |&gt; \n  mutate(bill_wid = 0.5 * bill_dep,\n         ____ = bill_len * bill_dep * ____)\n\n\n\n\n\n\n\nTip\n\n\n\nYou can create several new variables in one mutate() call — later variables can use ones you just created.\n\n\n\n\n\n\nShow solution\npenguins |&gt; \n  mutate(bill_wid = 0.5 * bill_dep,\n         bill_vol = bill_len * bill_dep * bill_wid)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/02-dplyr-basics.html#filter",
+    "href": "tutorials/02-dplyr-basics.html#filter",
+    "title": "3  Data manipulation with dplyr",
+    "section": "3.2 Filter",
+    "text": "3.2 Filter\nUse filter() to keep only rows that meet one or more conditions. It’s like subsetting your data to focus on cases of interest.\n\nExampleExerciseSolution\n\n\nHere we select only Adelie penguins.\n\npenguins |&gt;\n  filter(species == \"Adelie\")\n\n\n  \n\n\n\nYou can combine conditions with & (and), | (or), and ! (not):\n\npenguins |&gt;\n  # Only Adelie penguins from Torgersen Island heavier than 4000g\n  filter(species == \"Adelie\" & island == \"Torgersen\" & body_mass &gt; 4000)\n\n\n  \n\n\n\n\n\nFilter to include only Gentoo penguins with a body mass over 5000g. Replace the blanks with the correct variable names.\n\npenguins |&gt;\n  filter(___ == \"Gentoo\", ___ &gt; 5000)\n\n\n\n\n\n\n\nNote\n\n\n\nfilter() is case-sensitive: “Gentoo” is not the same as “gentoo”.\n\n\n\n\n\n\nShow solution\npenguins |&gt;\n  filter(species == \"Gentoo\", body_mass &gt; 5000)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/02-dplyr-basics.html#select",
+    "href": "tutorials/02-dplyr-basics.html#select",
+    "title": "3  Data manipulation with dplyr",
+    "section": "3.3 Select",
+    "text": "3.3 Select\nUse select() to choose variables you want to keep, or to reorder or drop columns. You can name them directly, use helpers like starts_with(), or exclude with -.\n\nExampleExerciseSolution\n\n\n\npenguins |&gt;\n  select(species, island, bill_len, bill_dep)\n\n\n  \n\n\n\n\npenguins |&gt; \n  select(starts_with(\"bill\"))\n\n\n  \n\n\n\n\n\nSelect the key descriptive variables for species and bill or flipper size. Replace the blanks with the correct variable names.\n\npenguins |&gt;\n  select(___, ___, ___, ___)\n\n\n\n\n\n\n\nTip\n\n\n\nWhen using select(), the column order in your code determines the order in the result.\n\n\n\n\n\n\nShow solution\npenguins |&gt;\n  select(species, bill_len, bill_dep, flipper_len)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/02-dplyr-basics.html#summary-statistics",
+    "href": "tutorials/02-dplyr-basics.html#summary-statistics",
+    "title": "3  Data manipulation with dplyr",
+    "section": "3.4 Summary statistics",
+    "text": "3.4 Summary statistics\nUse group_by() with summarise() to compute summary statistics for each group.\n\nn() returns the number of rows\nmean() returns the mean\nsd() returns the standard deviation\n\n\n\n\n\n\n\nTip\n\n\n\nWhen grouping, always confirm that the variable you group by has the expected number of unique values using n_distinct().\n\n\n\nExample 1Exercise 1Solution 1Example 2Exercise 2Solution 2\n\n\nIn this example, we are interested in the number of penguins within each species and the mean and standard deviation for their bill lengths.\n\npenguins |&gt; \n  group_by(species) |&gt; \n  summarise(\n    n = n(),\n    mean_bill_len = mean(bill_len, na.rm = TRUE),\n    sd_bill_len = sd(bill_len, na.rm = TRUE)\n  )\n\n\n  \n\n\n\n\n\n\n\n\n\nNote\n\n\n\nBy default, mean() and sd() return NA if any missing values exist. Use na.rm = TRUE to remove them before calculating statistics.\n\n\n\n\nSummarise the mean observed body_mass and number of cases for each species. Replace the blanks with the correct variable names.\n\npenguins |&gt;\n  group_by(____) |&gt;\n  summarise(\n    n = n(),\n    mean_body_mass_comp = mean(____, ____ = ____)\n  )\n\n\n\n\n\n\n\nTip\n\n\n\nAlways check whether your summary excludes missing data — describe this clearly when you present results.\n\n\n\n\n\n\nShow solution\npenguins |&gt;\n  group_by(species) |&gt;\n  summarise(\n    n = n(),\n    mean_body_mass_comp = mean(body_mass, na.rm = TRUE)\n  )\n\n\n\n  \n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis table shows the number of observations in each species and the mean body mass for cases with observations. This table could be misleading if that is not explained properly as a reader may think that is the mean body mass for all observations.\n\n\n\n\nSometimes you want to calculate statistics only on observed cases before summarising.\n\npenguins |&gt; \n  filter(!is.na(body_mass)) |&gt;\n  group_by(species) |&gt;\n  summarise(n = n(),\n            mean_body_mass = mean(body_mass))\n\n\n  \n\n\n\n\n\nNow we want to present the observed body mass for each species and show how many observations the mean is based on. Replace the blanks with the correct variable names.\n\npenguins |&gt; \n  filter(!____(body_mass)) |&gt; \n  summarise(\n    n = ____,\n    mean_body_mass_obs = mean(____))\n\n\n\n\npenguins |&gt; \n  filter(!is.na(body_mass)) |&gt; \n  summarise(\n    n = n(),\n    mean_body_mass_obs = mean(body_mass))",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/02-dplyr-basics.html#next-steps",
+    "href": "tutorials/02-dplyr-basics.html#next-steps",
+    "title": "3  Data manipulation with dplyr",
+    "section": "3.5 Next steps",
+    "text": "3.5 Next steps\nNow you know how to create, filter, select, and summarise data with dplyr.\nNext, explore arrange() for sorting rows or join() functions for combining datasets.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Data manipulation with dplyr</span>"
     ]
@@ -32,21 +122,21 @@
   {
     "objectID": "tutorials/03-ggplot-basics.html",
     "href": "tutorials/03-ggplot-basics.html",
-    "title": "4  Visualisation with ggplot2",
+    "title": "4  DRAFT: Visualisation with ggplot2",
     "section": "",
-    "text": "We will plot the grouped means from the previous tutorial.\n\nlibrary(tidyverse)\n\nsummary_tbl &lt;- tibble(\n  group = c(\"A\",\"B\",\"C\"),\n  mean_value = c(4.67, 5.00, 4.00)\n)\n\nsummary_tbl |&gt;\n  ggplot(aes(x = group, y = mean_value)) +\n  geom_col() +\n  geom_text(aes(label = round(mean_value, 2)), vjust = -0.4) +\n  labs(\n    x = \"Group\",\n    y = \"Mean value\",\n    title = \"Mean by group\"\n  ) +\n  theme_minimal()",
+    "text": "We will plot the grouped means from the previous tutorial.\n\nlibrary(dplyr) # Data manipulation\nlibrary(ggplot2) # Figures\n\npenguins |&gt; \n  ggplot(aes(x = species)) +\n  geom_boxplot(aes(y = bill_len))\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_boxplot()`).",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>DRAFT: Visualisation with ggplot2</span>"
     ]
   },
   {
     "objectID": "tutorials/04-lm-basics.html",
     "href": "tutorials/04-lm-basics.html",
-    "title": "5  Linear models: a minimal example",
+    "title": "5  DRAFT: Linear models: a minimal example",
     "section": "",
-    "text": "Fit and interpret a simple linear model.\n\nlibrary(tidyverse)\nset.seed(1)\n\ndat &lt;- tibble(\n  x = seq(0, 10, length.out = 50),\n  y = 2 + 0.8 * x + rnorm(50, sd = 1.5)\n)\n\nfit &lt;- lm(y ~ x, data = dat)\nbroom::tidy(fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)    2.17     0.351       6.19 1.28e- 7\n2 x              0.795    0.0605     13.1  1.59e-17\n\n\n\n# Visual check\nlibrary(ggplot2)\n\ndat |&gt;\n  ggplot(aes(x, y)) +\n  geom_point() +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  labs(title = \"Linear fit\", x = \"x\", y = \"y\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n# Model summary and basic diagnostics\nbroom::glance(fit)\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1     0.783         0.778  1.26      173. 1.59e-17     1  -81.5  169.  175.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;",
+    "text": "Fit and interpret a simple linear model.\n\nlibrary(dplyr) # Data manipulation\nlibrary(broom) # Statistical output\nlibrary(ggplot2) # Figures\n\n\nfit &lt;- lm(bill_len ~ bill_dep + species, data = penguins)\nbroom::tidy(fit)\n\n\n  \n\n\n\n\n# Visual check\n\npenguins |&gt; \n  ggplot(aes(x = bill_dep, y = bill_len, colour = species)) +\n  geom_point() +\n  geom_smooth(method = \"lm\", se = TRUE) +\n  labs(title = \"Linear fit\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\n\n\n# Model summary and basic diagnostics\nbroom::glance(fit)",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>DRAFT: Linear models: a minimal example</span>"
     ]
   }
 ]
