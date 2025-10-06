@@ -2,29 +2,291 @@
 title: "Data manipulation with dplyr"
 ---
 
-We will create a small data frame and compute grouped summaries.
+This chapter introduces core `dplyr` verbs for exploring and transforming data. These tools make your code clearer and easier to read than base R. The examples below introduce their most common uses. We will go through how to:
+
+1. Create a new variable from existing variables
+2. Filter data based on a variable in your data
+3. Select specific variables in your data
+4. Summarise multiple rows of your data
+
+
+:::{.callout-note}
+This section assumes:
+
+* you have the `dplyr` package loaded in your current session using `library(dplyr)` or `library(tidyverse)`
+* you are working with *wide* data (i.e., one row per case and one column per variable). See [R4DS Tidy Data](https://r4ds.hadley.nz/data-tidy.html) for more details about tidy data and different formats.
+:::
+
+As a reminder, here are the top few rows of the `penguins` dataset
 
 ```{r}
 #| message: false
-library(tidyverse)
-library(janitor)
 
-df <- tibble(
-  id = 1:8,
-  group = c("A","A","B","B","B","A","C","C"),
-  value = c(3, 5, 2, 9, 4, 6, 1, 7)
-) |>
-  clean_names()
+library(dplyr) # Data manipulation
 
-summary_tbl <- df |>
-  group_by(group) |>
+head(penguins)
+```
+
+
+## New variables
+
+Use `mutate()` to create new variables or modify existing ones. Here we estimate a rough “bill volume” from the existing bill dimensions.
+
+We have two variables about the penguin's bills: `bill_len` and `bill_dep`. We want to calculate a volume of each penguins bill. For now, we will assume that their bills are twice as deep as they are wide (and they are perfect cuboids!). First we want to create a variable that is their bill width and then we want to calculate the volume.
+
+::: {.panel-tabset}
+
+### Example
+
+The code below will create a new column *at the end of the data* called `bill_wid`. Next you will extend this to calculate the volume of the bill, creating the variable `bill_vol`.
+
+```{r}
+penguins |> 
+  mutate(bill_wid = 0.5 * bill_dep)
+```
+
+
+### Exercise
+
+Try creating both `bill_wid` and `bill_vol` in one step. Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |> 
+  mutate(bill_wid = 0.5 * bill_dep,
+         ____ = bill_len * bill_dep * ____)
+```
+
+:::{.callout-tip}
+You can create several new variables in one `mutate()` call — later variables can use ones you just created.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |> 
+  mutate(bill_wid = 0.5 * bill_dep,
+         bill_vol = bill_len * bill_dep * bill_wid)
+```
+
+:::
+
+## Filter
+
+Use `filter()` to keep only rows that meet one or more conditions. It’s like subsetting your data to focus on cases of interest.
+
+::: {.panel-tabset}
+
+### Example
+
+Here we select only Adelie penguins.
+
+```{r}
+penguins |>
+  filter(species == "Adelie")
+```
+
+You can combine conditions with `&` (and), `|` (or), and `!` (not):
+
+```{r}
+penguins |>
+  # Only Adelie penguins from Torgersen Island heavier than 4000g
+  filter(species == "Adelie" & island == "Torgersen" & body_mass > 4000)
+```
+
+### Exercise
+
+Filter to include only Gentoo penguins with a body mass over 5000g. Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |>
+  filter(___ == "Gentoo", ___ > 5000)
+```
+
+:::{.callout-note}
+filter() is case-sensitive: "Gentoo" is not the same as "gentoo".
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  filter(species == "Gentoo", body_mass > 5000)
+```
+
+:::
+
+## Select
+
+Use `select()` to choose variables you want to keep, or to reorder or drop columns. You can name them directly, use helpers like `starts_with()`, or exclude with `-`.
+
+::: {.panel-tabset}
+
+### Example
+
+```{r}
+penguins |>
+  select(species, island, bill_len, bill_dep)
+```
+
+
+```{r}
+penguins |> 
+  select(starts_with("bill"))
+```
+
+### Exercise
+
+Select the key descriptive variables for species and bill or flipper size.  Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |>
+  select(___, ___, ___, ___)
+```
+
+:::{.callout-tip}
+When using `select()`, the column order in your code determines the order in the result.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  select(species, bill_len, bill_dep, flipper_len)
+```
+
+
+:::
+
+## Summary statistics
+
+Use `group_by()` with `summarise()` to compute summary statistics for each group.
+
+  * `n()` returns the number of rows
+  * `mean()` returns the mean
+  * `sd()` returns the standard deviation
+  
+
+::: {.callout-tip}  
+When grouping, always confirm that the variable you group by has the expected number of unique values using `n_distinct()`.  
+:::
+
+::: {.panel-tabset}
+
+### Example 1
+
+In this example, we are interested in the number of penguins within each species and the mean and standard deviation for their bill lengths.
+
+```{r}
+penguins |> 
+  group_by(species) |> 
   summarise(
     n = n(),
-    mean_value = mean(value),
-    sd_value = sd(value),
-    .groups = "drop"
-  ) |>
-  arrange(desc(mean_value))
+    mean_bill_len = mean(bill_len, na.rm = TRUE),
+    sd_bill_len = sd(bill_len, na.rm = TRUE)
+  )
 
-summary_tbl
 ```
+
+:::{.callout-note}
+By default, mean() and sd() return NA if any missing values exist.
+Use na.rm = TRUE to remove them before calculating statistics.
+:::
+
+### Exercise 1
+
+Summarise the mean observed `body_mass` and number of cases for each species. Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |>
+  group_by(____) |>
+  summarise(
+    n = n(),
+    mean_body_mass_comp = mean(____, ____ = ____)
+  )
+
+```
+
+:::{.callout-tip}
+Always check whether your summary excludes missing data — describe this clearly when you present results.
+:::
+
+### Solution 1
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_body_mass_comp = mean(body_mass, na.rm = TRUE)
+  )
+
+```
+
+::: {.callout-warning}
+This table shows the number of observations in each species and the mean body mass for cases with observations. This table could be misleading if that is not explained properly as a reader may think that is the mean body mass for all observations.
+:::
+
+
+### Example 2
+
+Sometimes you want to calculate statistics only on observed cases before summarising.
+
+```{r}
+penguins |> 
+  filter(!is.na(body_mass)) |>
+  group_by(species) |>
+  summarise(n = n(),
+            mean_body_mass = mean(body_mass))
+```
+
+
+
+### Exercise 2
+
+Now we want to present the observed body mass for each species and show how many observations the mean is based on. Replace the blanks with the correct variable names.
+
+```{r}
+#| eval: false
+
+penguins |> 
+  filter(!____(body_mass)) |> 
+  summarise(
+    n = ____,
+    mean_body_mass_obs = mean(____))
+```
+
+### Solution 2
+
+```{r}
+penguins |> 
+  filter(!is.na(body_mass)) |> 
+  summarise(
+    n = n(),
+    mean_body_mass_obs = mean(body_mass))
+```
+
+:::
+
+## Next steps
+Now you know how to create, filter, select, and summarise data with `dplyr`.  
+Next, explore `arrange()` for sorting rows or `join()` functions for combining datasets.

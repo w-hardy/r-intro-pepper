@@ -1,15 +1,112 @@
 ---
-title: "R and Quarto: quick start"
+title: "R: quick start"
 ---
 
-This tutorial confirms your setup and shows how to run code chunks.
+This tutorial helps you check your R setup and learn how to run code and explore data. You’ll use these skills in later sections.
+
+
+:::{.callout-tip}
+There is a clipboard icon in the top right of each code block, you can use this to copy the code to the clipboard, which may be useful in some of the exercises. Copying does not execute the code — you’ll still need to paste and run it in your R console.
+:::
+
+## Installing and loading packages
+
+For most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: `dplyr` for data manipulation, `ggplot2` for creating plots, and `broom` for summarising statistical models. These are installed using the `install.packages()` function.^[You can install multiple packages using one function call by using the `c()` operator to *chain* the packages together. Remember to use quote marks '"' around each package name.]
+
+```{r}
+#| eval: false
+install.packages(c("readr", "dplyr", "ggplot2", "broom"))
+```
+
+
+:::{.callout-note}
+Running the `install.packages()` function will also install dependencies for the packages you have requested
+:::
+
+::: {.callout-tip}
+You only need to install each package once per version of R, but you must use library() every time you start a new R session.
+:::
+
+
+You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:
+
+```{r}
+#| eval: false
+library(readr) # For reading data
+library(dplyr) # For data manipulation
+library(ggplot2) # For creating plots
+```
+
+:::{.callout-note}
+Anything after `#` is ignored by R. Use comments to explain what your code does or why you made certain choices.
+:::
+
+
+## Data
+
+For more detail on importing data, see the R4DS chapter on [data import](https://r4ds.hadley.nz/data-import.html).
+
+### Preloaded data
+
+R comes with several datasets preloaded in the `datasets` package. These can be useful when you are learning new methods or to demonstrate things to others. For the tutorials on this site we will use the [`penguins` dataset](https://allisonhorst.github.io/palmerpenguins/reference/penguins.html), R (4.5.0+) includes the penguins dataset, originally from the palmerpenguins package. The first five rows are below:
+
+```{r}
+penguins |> 
+  head(n = 5) # The head(n = 5) function shows the top five (n) rows of data
+```
+
+
+and the last four rows are below:
+
+```{r}
+penguins |> 
+  tail(n = 4) # The tail(n = 4) function shows the bottom four (n) rows of data
+```
+
+::: {.callout-tip}
+Use glimpse(penguins) to quickly see variable names, types, and example values.
+:::
+
+We can see that we have different types of data in each column. 
+
+* `species`, `island`, and `sex` are factors
+* `bill_len` and `bill_dep` are doubles (numeric variables with decimals)
+* `flipper_len`, `body_mass`, and `year` are integers
+
+
+:::{.callout-note}
+
+The pipe operator `|>` essentially *passes* the object on the left to the right, this could be one one line
+
+```
+penguins |> head()
+```
+
+or it might be on multiple lines
+
+```
+penguins |> 
+  head()
+```
+
+:::
+
+### Load your own
+
+Usually you will need to load your own data into R, this will need to be done each session. There are several ways of doing this, one of the most common ways to do so is using `read_csv()`
 
 ```{r}
 #| message: false
-# Base pipe with tidyverse conventions
-library(tidyverse)
 
-tib <- tibble(x = 1:5, y = x^2)
-tib |>
-  summarise(mean_x = mean(x), mean_y = mean(y))
+my_data <- read_csv("data/my_file.csv")
+
+head(my_data)
 ```
+
+:::{.callout-tip}
+Make sure the file path is correct and that you’ve set your working directory to where the file is saved.
+:::
+
+## Next chapter 
+
+Now that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.
