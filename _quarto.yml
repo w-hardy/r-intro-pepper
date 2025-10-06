@@ -18,7 +18,6 @@ book:
 
 format:
   html:
-    includes-in-header: plausible.html
     theme:
       light: cosmo
     code-copy: true
