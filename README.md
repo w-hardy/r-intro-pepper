@@ -10,7 +10,7 @@ Built as a **Quarto Book**, edited in **RStudio**, and deployed to **GitHub Page
 - 04: Linear models (basics)
 
 ## Prerequisites
-- R (latest stable)
+- R (>= 4.5.0)
 - RStudio
 - Quarto (<https://quarto.org/>)
 
