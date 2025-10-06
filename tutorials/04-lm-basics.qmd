@@ -1,33 +1,29 @@
 ---
-title: "Linear models: a minimal example"
+title: "DRAFT: Linear models: a minimal example"
 ---
 
 Fit and interpret a simple linear model.
 
 ```{r}
 #| message: false
-library(tidyverse)
-set.seed(1)
+library(dplyr) # Data manipulation
+library(broom) # Statistical output
+library(ggplot2) # Figures
 
-dat <- tibble(
-  x = seq(0, 10, length.out = 50),
-  y = 2 + 0.8 * x + rnorm(50, sd = 1.5)
-)
 
-fit <- lm(y ~ x, data = dat)
+fit <- lm(bill_len ~ bill_dep + species, data = penguins)
 broom::tidy(fit)
 ```
 
 
 ```{r}
 # Visual check
-library(ggplot2)
 
-dat |>
-  ggplot(aes(x, y)) +
+penguins |> 
+  ggplot(aes(x = bill_dep, y = bill_len, colour = species)) +
   geom_point() +
   geom_smooth(method = "lm", se = TRUE) +
-  labs(title = "Linear fit", x = "x", y = "y") +
+  labs(title = "Linear fit") +
   theme_minimal()
 ```
 
