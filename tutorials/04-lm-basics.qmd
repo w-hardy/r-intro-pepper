@@ -2,53 +2,55 @@
 title: "Linear models: a minimal example"
 ---
 
-Linear models describe how a numeric response changes with one or more predictors. In this chapter you will:
+Linear models describe how a numeric response changes with one or more predictors.  
+In this chapter you will:
 
 1. Fit a linear model with `lm()`
 2. Tidy coefficient estimates for interpretation
 3. Check model diagnostics and make predictions
-
 
 :::{.callout-note}
 This section assumes:
 
 * you have loaded `dplyr`, `ggplot2`, and `broom`
 * your response variable is numeric and roughly continuous
-* you have inspected the data for missing values or obvious data entry errors
+* you have inspected the data for missing values or obvious entry errors
 :::
 
 We continue using the `penguins` dataset to predict bill length.
 
 ```{r}
 #| message: false
-library(dplyr)  # Data manipulation
-library(ggplot2)  # Figures
-library(broom)  # Model tidying
+library(dplyr)   # Data manipulation
+library(ggplot2) # Visualisation
+library(broom)   # Model tidying
 
 penguins |>
   select(species, bill_len, bill_dep, flipper_len, body_mass, sex) |>
   head()
 ```
 
+---
 
 ## Fit a linear model
 
-Use `lm()` with a formula of the form `response ~ predictor1 + predictor2` to estimate the relationship.
+Use `lm()` with a formula of the form `response ~ predictor1 + predictor2` to estimate how a numeric outcome changes with one or more predictors.  
+For example, we can model penguin bill length as a function of bill depth.
 
 ::: {.panel-tabset}
 
 ### Example
-
-We model bill length as a function of bill depth.
 
 ```{r}
 fit_simple <- lm(bill_len ~ bill_dep, data = penguins)
 fit_simple
 ```
 
+This output gives the intercept and slope estimates for the linear relationship between `bill_len` and `bill_dep`.
+
 ### Exercise
 
-Extend the model to also include species as a categorical predictor. Replace the blanks with the appropriate code.
+Extend the model to also include `species` as a categorical predictor. Replace the blanks with the appropriate code.
 
 ```{r}
 #| eval: false
@@ -58,7 +60,7 @@ fit_species
 ```
 
 :::{.callout-tip}
-`lm()` automatically creates indicator variables for factors like `species`.
+`lm()` automatically creates indicator variables for factors such as `species`.
 :::
 
 ### Solution
@@ -73,15 +75,18 @@ fit_species
 
 :::
 
+---
+
 ## Interpret coefficients
 
-`broom::tidy()` converts model output into a tidy tibble that is easy to read and combine with other results.
+`broom::tidy()` converts model output into a tidy tibble that is easy to read and combine with other results.  
+Each coefficient represents the expected change in bill length for a one-unit change in that predictor, holding all others constant.
 
 ::: {.panel-tabset}
 
 ### Example
 
-We obtain coefficient estimates with standard errors and p-values.
+Obtain coefficient estimates with standard errors and p-values.
 
 ```{r}
 tidy(fit_species)
@@ -98,7 +103,7 @@ tidy(fit_species, conf.int = ____, conf.level = ____)
 ```
 
 :::{.callout-note}
-Confidence intervals provide a range of plausible values for each coefficient.
+Confidence intervals show a range of plausible values for each coefficient.
 :::
 
 ### Solution
@@ -112,15 +117,19 @@ tidy(fit_species, conf.int = TRUE, conf.level = 0.95)
 
 :::
 
+---
+
 ## Check diagnostics and predict
 
-Use `augment()` for row-level diagnostics and `glance()` for overall model fit. Predictions require a tibble of new values.
+Use `augment()` for row-level diagnostics and `glance()` for overall model fit.  
+Residuals should scatter randomly around zero; systematic patterns may indicate model misspecification.  
+Predictions require a tibble of new values using the same variable names as in the model.
 
 ::: {.panel-tabset}
 
 ### Example
 
-Here we draw a residual plot and summarise goodness of fit.
+We first examine model diagnostics.
 
 ```{r}
 augmented <- augment(fit_species)
@@ -132,25 +141,39 @@ ggplot(augmented, aes(x = .fitted, y = .resid, colour = species)) +
   theme_minimal()
 ```
 
+Summarise overall model fit.
+
 ```{r}
 glance(fit_species)
 ```
 
+We can also use `predict()` to generate fitted values for the training data or new data.  
+Here we predict bill length for the first three penguins in the dataset.
+
+```{r}
+predict(fit_species, newdata = penguins |> head(3))
+```
+
+`predict()` returns a numeric vector of fitted values corresponding to the supplied rows.
+
 ### Exercise
 
-Create predicted bill lengths for new penguins with specified bill depth and species. Replace the blanks with the correct column names.
+Create predicted bill lengths for new penguins with specified bill depth and species.  
+Replace the blanks with the correct column names or objects.
 
 ```{r}
 #| eval: false
 
+# tibble() creates a small data frame of new values
 new_penguins <- tibble(
   bill_dep = c(17, 19),
   species = c("Adelie", "Gentoo")
 )
 
-predict(____, newdata = ____) |>
-  (\(pred) tibble(predicted_bill_len = pred)) |>
-  bind_cols(new_penguins)
+pred <- predict(____, newdata = ____)
+
+new_penguins |>
+  mutate(predicted_bill_len = ____)
 ```
 
 :::{.callout-warning}
@@ -168,13 +191,23 @@ new_penguins <- tibble(
   species = c("Adelie", "Gentoo")
 )
 
-predict(fit_species, newdata = new_penguins) |>
-  (\(pred) tibble(predicted_bill_len = pred)) |>
-  bind_cols(new_penguins)
+pred <- predict(fit_species, newdata = new_penguins)
+
+new_penguins |>
+  mutate(predicted_bill_len = pred)
 ```
 
 :::
 
+---
+
 ## Next steps
-Now you know how to fit, interpret, and evaluate a linear model in R.
-Next, explore models with interaction terms (e.g., `bill_dep * species`) or experiment with other response variables.
+
+You now know how to:
+
+* fit a linear model with `lm()`
+* interpret coefficients using `broom::tidy()`
+* check assumptions with `augment()` and `glance()`
+* generate predictions with `predict()`
+
+Next, experiment with interaction terms (e.g., `bill_dep * species`) or try using another numeric response such as `body_mass`.
