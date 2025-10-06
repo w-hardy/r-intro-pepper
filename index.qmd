@@ -2,7 +2,7 @@
 title: "Welcome"
 ---
 
-This site contains short, practical tutorials to help PEPPER group members build skills in [R](https://cran.r-project.org/) using [**RStudio**](https://posit.co/products/open-source/rstudio/?sid=1) and [tidyverse packages](https://www.tidyverse.org/) in [tidyverse-style code](https://style.tidyverse.org/).
+This site contains short, practical tutorials to help PEPPER group members build skills in [R](https://cran.r-project.org/) using [RStudio](https://posit.co/products/open-source/rstudio/?sid=1) and [tidyverse packages](https://www.tidyverse.org/) in [tidyverse-style code](https://style.tidyverse.org/).
 [Here](https://rstudio-education.github.io/hopr/starting.html) is a useful guide to installing R and RStudio.
 
 Working through the tutorials here may be useful for those new to R, particularly in preparation for working through the [R for Health Technology Assessment](https://gianluca.statistica.it/books/online/r-hta/) text book if the contents of [Chapter 2: Introduction to R](https://gianluca.statistica.it/books/online/r-hta/chapters/03.software/software) is new. [R for Data Science](https://r4ds.hadley.nz/) will provide a much more comprehensive instruction on using R. 
@@ -19,4 +19,4 @@ These tutorials are not meant to be comprehensive and there will also be other w
 
 # Issues
 
-If there are problems with anything contained in this site, please add a "new issue" using the green button at https://github.com/w-hardy/r-intro-pepper/issues. This will allow me to keep track of them.
+If there are problems with anything contained in this site, please add a "new issue" using the green button at [https://github.com/w-hardy/r-intro-pepper/issues](https://github.com/w-hardy/r-intro-pepper/issues). This will allow me to keep track of them.
