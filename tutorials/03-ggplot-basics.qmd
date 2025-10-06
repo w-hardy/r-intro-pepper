@@ -21,6 +21,7 @@ We continue working with the `penguins` dataset.
 
 ```{r}
 #| message: false
+library(dplyr) # Data manipulation 
 library(ggplot2) # Figures
 
 head(penguins)
