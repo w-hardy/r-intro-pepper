@@ -270,6 +270,7 @@ Now we want to present the observed body mass for each species and show how many
 
 penguins |> 
   filter(!____(body_mass)) |> 
+  group_by(____) |> 
   summarise(
     n = ____,
     mean_body_mass_obs = mean(____))
@@ -280,6 +281,7 @@ penguins |>
 ```{r}
 penguins |> 
   filter(!is.na(body_mass)) |> 
+  group_by(species) |> 
   summarise(
     n = n(),
     mean_body_mass_obs = mean(body_mass))
