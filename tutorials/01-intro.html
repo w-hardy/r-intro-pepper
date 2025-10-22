@@ -183,15 +183,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link active" data-scroll-target="#installing-and-loading-packages"><span class="header-section-number">2.1</span> Installing and loading packages</a></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">2.2</span> Data</a>
+  <li><a href="#before-you-begin" id="toc-before-you-begin" class="nav-link active" data-scroll-target="#before-you-begin"><span class="header-section-number">2.1</span> Before you begin</a></li>
+  <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link" data-scroll-target="#installing-and-loading-packages"><span class="header-section-number">2.2</span> Installing and loading packages</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">2.3</span> Data</a>
   <ul class="collapse">
-  <li><a href="#preloaded-data" id="toc-preloaded-data" class="nav-link" data-scroll-target="#preloaded-data"><span class="header-section-number">2.2.1</span> Preloaded data</a></li>
-  <li><a href="#load-your-own" id="toc-load-your-own" class="nav-link" data-scroll-target="#load-your-own"><span class="header-section-number">2.2.2</span> Load your own</a></li>
+  <li><a href="#preloaded-data" id="toc-preloaded-data" class="nav-link" data-scroll-target="#preloaded-data"><span class="header-section-number">2.3.1</span> Preloaded data</a></li>
+  <li><a href="#load-your-own" id="toc-load-your-own" class="nav-link" data-scroll-target="#load-your-own"><span class="header-section-number">2.3.2</span> Load your own</a></li>
   </ul></li>
-  <li><a href="#explore-dataset-dimensions" id="toc-explore-dataset-dimensions" class="nav-link" data-scroll-target="#explore-dataset-dimensions"><span class="header-section-number">2.3</span> Explore dataset dimensions</a></li>
-  <li><a href="#summarise-numeric-columns" id="toc-summarise-numeric-columns" class="nav-link" data-scroll-target="#summarise-numeric-columns"><span class="header-section-number">2.4</span> Summarise numeric columns</a></li>
-  <li><a href="#next-chapter" id="toc-next-chapter" class="nav-link" data-scroll-target="#next-chapter"><span class="header-section-number">2.5</span> Next chapter</a></li>
+  <li><a href="#explore-dataset-dimensions" id="toc-explore-dataset-dimensions" class="nav-link" data-scroll-target="#explore-dataset-dimensions"><span class="header-section-number">2.4</span> Explore dataset dimensions</a></li>
+  <li><a href="#summarise-numeric-columns" id="toc-summarise-numeric-columns" class="nav-link" data-scroll-target="#summarise-numeric-columns"><span class="header-section-number">2.5</span> Summarise numeric columns</a></li>
+  <li><a href="#next-chapter" id="toc-next-chapter" class="nav-link" data-scroll-target="#next-chapter"><span class="header-section-number">2.6</span> Next chapter</a></li>
   </ul>
 </nav>
     </div>
@@ -218,6 +219,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This tutorial helps you check your R setup and learn how to run code and explore data. You’ll use these skills in later sections.</p>
+<section id="before-you-begin" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="before-you-begin"><span class="header-section-number">2.1</span> Before you begin</h2>
+<ol type="1">
+<li><strong>Open RStudio.</strong> Double-click the RStudio icon (or launch it from Posit Cloud) and wait for the Console pane to show the R version. If the console displays an error, reinstall R before continuing.</li>
+<li><strong>Create a script.</strong> Select <kbd>File</kbd> → <kbd>New File</kbd> → <kbd>R Script</kbd>. This opens the Source pane where you can save your code as a reusable script. Save the file immediately using <kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd> so you can keep track of your work.</li>
+<li><strong>Run code.</strong> Type <code>1 + 1</code> on a line in the Source pane and press <kbd>Ctrl/Cmd</kbd> + <kbd>Enter</kbd> (or use the <strong>Run</strong> button). The code should appear in the Console followed by the result. You can also type directly in the Console for quick checks.</li>
+<li><strong>Check your working directory.</strong> Run <code>getwd()</code> to confirm where files will be saved. If needed, use the Files pane to navigate to your project folder and click <strong>Set As Working Directory</strong>.</li>
+</ol>
+<p>Once you are comfortable moving between the Source and Console panes, continue with installing and loading the packages you will use throughout the tutorials.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -231,9 +241,10 @@ Tip
 <p>There is a clipboard icon in the top right of each code block, you can use this to copy the code to the clipboard, which may be useful in some of the exercises. Copying does not execute the code — you’ll still need to paste and run it in your R console.</p>
 </div>
 </div>
-<section id="installing-and-loading-packages" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="installing-and-loading-packages"><span class="header-section-number">2.1</span> Installing and loading packages</h2>
-<p>For most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: <code>dplyr</code> for data manipulation, <code>ggplot2</code> for creating plots, and <code>broom</code> for summarising statistical models. These are installed using the <code>install.packages()</code> function.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="installing-and-loading-packages" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="installing-and-loading-packages"><span class="header-section-number">2.2</span> Installing and loading packages</h2>
+<p>For most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: <code>dplyr</code> for data manipulation, <code>ggplot2</code> for creating plots, and <code>broom</code> for summarising statistical models. These are installed using the <code>install.packages()</code> function.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> If you are using a managed machine, you may need to request administrator rights or ask IT to complete this step for you.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"readr"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"broom"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -263,7 +274,7 @@ Tip
 <p>You only need to install each package once per version of R, but you must use library() every time you start a new R session.</p>
 </div>
 </div>
-<p>You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:</p>
+<p>You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script. If <code>library()</code> reports an error, restart R (Session → Restart R) and try again to ensure your packages are available:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr) <span class="co"># For reading data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># For data manipulation</span></span>
@@ -283,11 +294,11 @@ Note
 </div>
 </div>
 </section>
-<section id="data" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="data"><span class="header-section-number">2.2</span> Data</h2>
-<p>For more detail on importing data, see the R4DS chapter on <a href="https://r4ds.hadley.nz/data-import.html">data import</a>.</p>
-<section id="preloaded-data" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="preloaded-data"><span class="header-section-number">2.2.1</span> Preloaded data</h3>
+<section id="data" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="data"><span class="header-section-number">2.3</span> Data</h2>
+<p>For more detail on importing data, see the R4DS chapter on <a href="https://r4ds.hadley.nz/data-import.html">data import</a>. The <a href="https://posit.co/resources/cheatsheets/read-data/">RStudio data import cheatsheet</a> is also a handy reference when you are working with CSV, Excel, or database connections.</p>
+<section id="preloaded-data" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="preloaded-data"><span class="header-section-number">2.3.1</span> Preloaded data</h3>
 <p>R comes with several datasets preloaded in the <code>datasets</code> package. These can be useful when you are learning new methods or to demonstrate things to others. For the tutorials on this site we will use the <a href="https://allisonhorst.github.io/palmerpenguins/reference/penguins.html"><code>penguins</code> dataset</a>, R (4.5.0+) includes the penguins dataset, originally from the palmerpenguins package. The first five rows are below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">|&gt;</span> </span>
@@ -322,7 +333,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use glimpse(penguins) to quickly see variable names, types, and example values.</p>
+<p>Use <code>glimpse(penguins)</code> to quickly see variable names, types, and example values.</p>
 </div>
 </div>
 <p>We can see that we have different types of data in each column.</p>
@@ -349,8 +360,8 @@ Note
 </div>
 </div>
 </section>
-<section id="load-your-own" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="load-your-own"><span class="header-section-number">2.2.2</span> Load your own</h3>
+<section id="load-your-own" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="load-your-own"><span class="header-section-number">2.3.2</span> Load your own</h3>
 <p>Usually you will need to load your own data into R, this will need to be done each session. There are several ways of doing this, one of the most common ways to do so is using <code>read_csv()</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/my_file.csv"</span>)</span>
@@ -372,8 +383,8 @@ Tip
 </div>
 </section>
 </section>
-<section id="explore-dataset-dimensions" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="explore-dataset-dimensions"><span class="header-section-number">2.3</span> Explore dataset dimensions</h2>
+<section id="explore-dataset-dimensions" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="explore-dataset-dimensions"><span class="header-section-number">2.4</span> Explore dataset dimensions</h2>
 <p>Get a quick sense of how much data you have before diving into analysis.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Example</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Exercise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Solution</a></li></ul>
@@ -423,8 +434,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="summarise-numeric-columns" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="summarise-numeric-columns"><span class="header-section-number">2.4</span> Summarise numeric columns</h2>
+<section id="summarise-numeric-columns" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="summarise-numeric-columns"><span class="header-section-number">2.5</span> Summarise numeric columns</h2>
 <p>Use basic summary functions to understand ranges of your numeric variables.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Example</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Exercise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">Solution</a></li></ul>
@@ -475,8 +486,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="next-chapter" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="next-chapter"><span class="header-section-number">2.5</span> Next chapter</h2>
+<section id="next-chapter" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="next-chapter"><span class="header-section-number">2.6</span> Next chapter</h2>
 <p>Now that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.</p>
 
 
