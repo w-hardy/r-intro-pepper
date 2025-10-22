@@ -31,7 +31,6 @@ You only need to install each package once per version of R, but you must use li
 You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:
 
 ```{r}
-#| eval: false
 library(readr) # For reading data
 library(dplyr) # For data manipulation
 library(ggplot2) # For creating plots
