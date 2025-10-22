@@ -107,6 +107,94 @@ head(my_data)
 Make sure the file path is correct and that you’ve set your working directory to where the file is saved.
 :::
 
-## Next chapter 
+## Explore dataset dimensions
+
+Get a quick sense of how much data you have before diving into analysis.
+
+::: {.panel-tabset}
+
+### Example
+
+Count the number of rows and columns in the `penguins` data.
+
+```{r}
+nrow(penguins)
+ncol(penguins)
+```
+
+### Exercise
+
+Work out how many distinct islands and years are represented. Replace the blanks with the correct column names and compute the summary with tidyverse verbs.
+
+```{r}
+#| eval: false
+
+penguins |> 
+  summarise(
+    num_islands = n_distinct(____),
+    num_years = n_distinct(____)
+  )
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |> 
+  summarise(
+    num_islands = n_distinct(island),
+    num_years = n_distinct(year)
+  )
+```
+
+:::
+
+## Summarise numeric columns
+
+Use basic summary functions to understand ranges of your numeric variables.
+
+::: {.panel-tabset}
+
+### Example
+
+Compute the mean bill length while removing missing values.
+
+```{r}
+penguins |> 
+  summarise(mean_bill_len = mean(bill_len, na.rm = TRUE))
+```
+
+### Exercise
+
+Calculate the median flipper length and standard deviation of body mass, excluding missing values. Fill in the blanks with the appropriate column names.
+
+```{r}
+#| eval: false
+
+penguins |> 
+  summarise(
+    median_flipper_len = median(____, ____ = ____),
+    sd_body_mass = sd(____, ____ = ____)
+  )
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |> 
+  summarise(
+    median_flipper_len = median(flipper_len, na.rm = TRUE),
+    sd_body_mass = sd(body_mass, na.rm = TRUE)
+  )
+```
+
+:::
+
+## Next chapter
 
 Now that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.
