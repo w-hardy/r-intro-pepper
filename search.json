@@ -14,7 +14,7 @@
     "href": "tutorials/01-intro.html",
     "title": "2  R: quick start",
     "section": "",
-    "text": "2.1 Installing and loading packages\nFor most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: dplyr for data manipulation, ggplot2 for creating plots, and broom for summarising statistical models. These are installed using the install.packages() function.1\ninstall.packages(c(\"readr\", \"dplyr\", \"ggplot2\", \"broom\"))\nYou will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:\nlibrary(readr) # For reading data\nlibrary(dplyr) # For data manipulation\nlibrary(ggplot2) # For creating plots",
+    "text": "2.1 Installing and loading packages\nFor most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: dplyr for data manipulation, ggplot2 for creating plots, and broom for summarising statistical models. These are installed using the install.packages() function.1\ninstall.packages(c(\"readr\", \"dplyr\", \"ggplot2\", \"broom\"))\nYou will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:\nlibrary(readr) # For reading data\nlibrary(dplyr) # For data manipulation\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(ggplot2) # For creating plots",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
     ]
@@ -40,11 +40,31 @@
     ]
   },
   {
+    "objectID": "tutorials/01-intro.html#explore-dataset-dimensions",
+    "href": "tutorials/01-intro.html#explore-dataset-dimensions",
+    "title": "2  R: quick start",
+    "section": "2.3 Explore dataset dimensions",
+    "text": "2.3 Explore dataset dimensions\nGet a quick sense of how much data you have before diving into analysis.\n\nExampleExerciseSolution\n\n\nCount the number of rows and columns in the penguins data.\n\nnrow(penguins)\n\n[1] 344\n\nncol(penguins)\n\n[1] 8\n\n\n\n\nWork out how many distinct islands and years are represented. Replace the blanks with the correct column names and compute the summary with tidyverse verbs.\n\npenguins |&gt; \n  summarise(\n    num_islands = n_distinct(____),\n    num_years = n_distinct(____)\n  )\n\n\n\n\n\nShow solution\npenguins |&gt; \n  summarise(\n    num_islands = n_distinct(island),\n    num_years = n_distinct(year)\n  )",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/01-intro.html#summarise-numeric-columns",
+    "href": "tutorials/01-intro.html#summarise-numeric-columns",
+    "title": "2  R: quick start",
+    "section": "2.4 Summarise numeric columns",
+    "text": "2.4 Summarise numeric columns\nUse basic summary functions to understand ranges of your numeric variables.\n\nExampleExerciseSolution\n\n\nCompute the mean bill length while removing missing values.\n\npenguins |&gt; \n  summarise(mean_bill_len = mean(bill_len, na.rm = TRUE))\n\n\n  \n\n\n\n\n\nCalculate the median flipper length and standard deviation of body mass, excluding missing values. Fill in the blanks with the appropriate column names.\n\npenguins |&gt; \n  summarise(\n    median_flipper_len = median(____, ____ = ____),\n    sd_body_mass = sd(____, ____ = ____)\n  )\n\n\n\n\n\nShow solution\npenguins |&gt; \n  summarise(\n    median_flipper_len = median(flipper_len, na.rm = TRUE),\n    sd_body_mass = sd(body_mass, na.rm = TRUE)\n  )",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
+    ]
+  },
+  {
     "objectID": "tutorials/01-intro.html#next-chapter",
     "href": "tutorials/01-intro.html#next-chapter",
     "title": "2  R: quick start",
-    "section": "2.3 Next chapter",
-    "text": "2.3 Next chapter\nNow that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.",
+    "section": "2.5 Next chapter",
+    "text": "2.5 Next chapter\nNow that you can install, load, and explore data, you’re ready to start manipulating it with dplyr.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R: quick start</span>"
     ]
@@ -154,7 +174,27 @@
     "href": "tutorials/03-ggplot-basics.html#add-summaries-and-labels",
     "title": "4  Visualisation with ggplot2",
     "section": "4.3 Add summaries and labels",
-    "text": "4.3 Add summaries and labels\nYou can layer statistical summaries and customise labels to communicate the key message.\n\nExampleExerciseSolution\n\n\nBelow we add a smooth trend line with geom_smooth() and give the axes and legend clear labels.\n\npenguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(se = FALSE) +\n  labs(\n    title = \"Body mass increases with flipper length\",\n    x = \"Flipper length (mm)\",\n    y = \"Body mass (g)\",\n    colour = \"Species\"\n  ) +\n  theme_minimal()\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\n\n\n\nAdd a line layer that connects the mean body mass by species. Start by summarising the data with dplyr, then add a geom_line() layer. Replace the blanks with the appropriate function names or variables.\n\nmean_mass &lt;- penguins |&gt;\n  group_by(species) |&gt;\n  summarise(mean_mass = mean(___, na.rm = TRUE))\n\npenguins |&gt;\n  ggplot(aes(x = species, y = body_mass)) +\n  geom_jitter(width = 0.2, alpha = 0.4) +\n  geom_line(data = mean_mass, aes(x = species, y = ____ , group = 1), colour = \"#3366aa\", linewidth = 1.2) +\n  labs(y = \"Body mass (g)\")\n\n\n\n\n\n\n\nNote\n\n\n\nWhen combining datasets in one plot, be explicit about aesthetics like group inside the layer where they apply.\n\n\n\n\n\n\nShow solution\nmean_mass &lt;- penguins |&gt;\n  group_by(species) |&gt;\n  summarise(mean_mass = mean(body_mass, na.rm = TRUE))\n\npenguins |&gt;\n  ggplot(aes(x = species, y = body_mass)) +\n  geom_jitter(width = 0.2, alpha = 0.4) +\n  geom_line(data = mean_mass, aes(x = species, y = mean_mass, group = 1), colour = \"#3366aa\", linewidth = 1.2) +\n  labs(y = \"Body mass (g)\")\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).",
+    "text": "4.3 Add summaries and labels\nYou can layer statistical summaries and customise labels to communicate the key message.\n\nExampleExerciseSolution\n\n\nAdd a smooth trend line with geom_smooth() and label the axes so the message is clear.\n\npenguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(se = FALSE) +\n  labs(\n    x = \"Flipper length (mm)\",\n    y = \"Body mass (g)\",\n    colour = \"Species\"\n  )\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).\n\n\n\n\n\n\n\n\n\n\n\nStarting from the same scatter plot, add a smooth curve and a title. Replace the blanks with the correct arguments.\n\npenguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(se = ____) +\n  labs(title = \"____ vs ____\")\n\n\n\n\n\n\n\nNote\n\n\n\nUsing se = FALSE removes the shaded confidence interval when you only want the trend line.\n\n\n\n\n\n\nShow solution\npenguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point(alpha = 0.6) +\n  geom_smooth(se = FALSE) +\n  labs(title = \"Flipper length vs body mass\")\n\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/03-ggplot-basics.html#plot-distributions",
+    "href": "tutorials/03-ggplot-basics.html#plot-distributions",
+    "title": "4  Visualisation with ggplot2",
+    "section": "4.4 Plot distributions",
+    "text": "4.4 Plot distributions\nUse histograms or density plots to examine how values are distributed.\n\nExampleExerciseSolution\n\n\nOverlay histograms of bill length for each species.\n\npenguins |&gt;\n  ggplot(aes(x = bill_len, fill = species)) +\n  geom_histogram(position = \"identity\", alpha = 0.5, binwidth = 1) +\n  labs(x = \"Bill length (mm)\", y = \"Count\")\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_bin()`).\n\n\n\n\n\n\n\n\n\n\n\nCreate density curves of body mass by species. Replace the blanks with the correct aesthetics.\n\npenguins |&gt;\n  ggplot(aes(x = ____, colour = ____)) +\n  geom_density(linewidth = 1) +\n  theme_minimal()\n\n\n\n\n\nShow solution\npenguins |&gt;\n  ggplot(aes(x = body_mass, colour = species)) +\n  geom_density(linewidth = 1) +\n  theme_minimal()\n\n\nWarning: Removed 2 rows containing non-finite outside the scale range\n(`stat_density()`).",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/03-ggplot-basics.html#save-plots-to-files",
+    "href": "tutorials/03-ggplot-basics.html#save-plots-to-files",
+    "title": "4  Visualisation with ggplot2",
+    "section": "4.5 Save plots to files",
+    "text": "4.5 Save plots to files\nAssign plots to objects so you can reuse or export them with ggsave().\n\nExampleExerciseSolution\n\n\nCreate a plot object and save it as a PNG.\n\nvolume_plot &lt;- penguins |&gt;\n  ggplot(aes(x = bill_dep, y = bill_len, colour = species)) +\n  geom_point(alpha = 0.7)\n\nggsave(\"volume-plot.png\", plot = volume_plot, width = 6, height = 4, dpi = 300)\n\n\n\nBuild a scatter plot of flipper length versus body mass, store it in size_plot, and save it as a PNG. Replace the blanks with the appropriate arguments.\n\nsize_plot &lt;- penguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point()\n\nggsave(\"size-plot.png\", plot = size_plot, width = ____, height = ____, dpi = 300)\n\n\n\n\n\nShow solution\nsize_plot &lt;- penguins |&gt;\n  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +\n  geom_point()\n\nggsave(\"size-plot.png\", plot = size_plot, width = 6, height = 4, dpi = 300)\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_point()`).",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
     ]
@@ -163,8 +203,8 @@
     "objectID": "tutorials/03-ggplot-basics.html#next-steps",
     "href": "tutorials/03-ggplot-basics.html#next-steps",
     "title": "4  Visualisation with ggplot2",
-    "section": "4.4 Next steps",
-    "text": "4.4 Next steps\nNow you know how to construct scatter plots, encode additional variables, and add summaries with ggplot2. Next, explore other geoms like geom_histogram() for distributions or geom_col() for totals.",
+    "section": "4.6 Next steps",
+    "text": "4.6 Next steps\nNow you know how to construct scatter plots, encode additional variables, and add summaries with ggplot2. Next, explore other geoms like geom_histogram() for distributions or geom_col() for totals.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Visualisation with ggplot2</span>"
     ]
@@ -190,11 +230,21 @@
     ]
   },
   {
+    "objectID": "tutorials/04-lm-basics.html#include-interaction-terms",
+    "href": "tutorials/04-lm-basics.html#include-interaction-terms",
+    "title": "5  Linear models: a minimal example",
+    "section": "5.2 Include interaction terms",
+    "text": "5.2 Include interaction terms\nInteractions let the effect of one predictor change depending on another predictor’s value.\n\nExampleExerciseSolution\n\n\nFit a model with an interaction between bill depth and species.\n\nfit_interaction &lt;- lm(bill_len ~ bill_dep * species, data = penguins)\ntidy(fit_interaction)\n\n\n  \n\n\n\n\n\nFit a model that allows the effect of bill depth to differ by sex. Replace the blanks.\n\nfit_sex &lt;- lm(bill_len ~ bill_dep * ____, data = ____)\ntidy(fit_sex)\n\n\n\n\n\nShow solution\nfit_sex &lt;- lm(bill_len ~ bill_dep * sex, data = penguins)\ntidy(fit_sex)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
+    ]
+  },
+  {
     "objectID": "tutorials/04-lm-basics.html#interpret-coefficients",
     "href": "tutorials/04-lm-basics.html#interpret-coefficients",
     "title": "5  Linear models: a minimal example",
-    "section": "5.2 Interpret coefficients",
-    "text": "5.2 Interpret coefficients\nbroom::tidy() converts model output into a tidy tibble that is easy to read and combine with other results.\nEach coefficient represents the expected change in bill length for a one-unit change in that predictor, holding all others constant.\n\nExampleExerciseSolution\n\n\nObtain coefficient estimates with standard errors and p-values.\n\ntidy(fit_species)\n\n\n  \n\n\n\n\n\nAdd 95% confidence intervals to the tidy output. Replace the blanks with the correct argument names.\n\ntidy(fit_species, conf.int = ____, conf.level = ____)\n\n\n\n\n\n\n\nNote\n\n\n\nConfidence intervals show a range of plausible values for each coefficient.\n\n\n\n\n\n\nShow solution\ntidy(fit_species, conf.int = TRUE, conf.level = 0.95)",
+    "section": "5.3 Interpret coefficients",
+    "text": "5.3 Interpret coefficients\nbroom::tidy() converts model output into a tidy tibble that is easy to read and combine with other results.\nEach coefficient represents the expected change in bill length for a one-unit change in that predictor, holding all others constant.\n\nExampleExerciseSolution\n\n\nObtain coefficient estimates with standard errors and p-values.\n\ntidy(fit_species)\n\n\n  \n\n\n\n\n\nAdd 95% confidence intervals to the tidy output. Replace the blanks with the correct argument names.\n\ntidy(fit_species, conf.int = ____, conf.level = ____)\n\n\n\n\n\n\n\nNote\n\n\n\nConfidence intervals show a range of plausible values for each coefficient.\n\n\n\n\n\n\nShow solution\ntidy(fit_species, conf.int = TRUE, conf.level = 0.95)",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
@@ -203,8 +253,18 @@
     "objectID": "tutorials/04-lm-basics.html#check-diagnostics-and-predict",
     "href": "tutorials/04-lm-basics.html#check-diagnostics-and-predict",
     "title": "5  Linear models: a minimal example",
-    "section": "5.3 Check diagnostics and predict",
-    "text": "5.3 Check diagnostics and predict\nUse augment() for row-level diagnostics and glance() for overall model fit.\nResiduals should scatter randomly around zero; systematic patterns may indicate model misspecification.\nPredictions require a tibble of new values using the same variable names as in the model.\n\nExampleExerciseSolution\n\n\nWe first examine model diagnostics.\n\naugmented &lt;- augment(fit_species)\n\nggplot(augmented, aes(x = .fitted, y = .resid, colour = species)) +\n  geom_point() +\n  geom_hline(yintercept = 0, linewidth = 0.3) +\n  labs(x = \"Fitted bill length\", y = \"Residuals\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nSummarise overall model fit.\n\nglance(fit_species)\n\n\n  \n\n\n\nWe can also use predict() to generate fitted values for the training data or new data.\nHere we predict bill length for the first three penguins in the dataset.\n\npredict(fit_species, newdata = penguins |&gt; head(3))\n\n       1        2        3 \n39.28437 37.47216 38.30856 \n\n\npredict() returns a numeric vector of fitted values corresponding to the supplied rows.\n\n\nCreate predicted bill lengths for new penguins with specified bill depth and species.\nReplace the blanks with the correct column names or objects.\n\n# tibble() creates a small data frame of new values\nnew_penguins &lt;- tibble(\n  bill_dep = c(17, 19),\n  species = c(\"Adelie\", \"Gentoo\")\n)\n\npred &lt;- predict(____, newdata = ____)\n\nnew_penguins |&gt;\n  mutate(predicted_bill_len = ____)\n\n\n\n\n\n\n\nWarning\n\n\n\nAlways check that your new data use the same variable names and factor levels as the original training data.\n\n\n\n\n\n\nShow solution\nnew_penguins &lt;- tibble(\n  bill_dep = c(17, 19),\n  species = c(\"Adelie\", \"Gentoo\")\n)\n\npred &lt;- predict(fit_species, newdata = new_penguins)\n\nnew_penguins |&gt;\n  mutate(predicted_bill_len = pred)",
+    "section": "5.4 Check diagnostics and predict",
+    "text": "5.4 Check diagnostics and predict\nUse augment() for row-level diagnostics and glance() for overall model fit.\nResiduals should scatter randomly around zero; systematic patterns may indicate model misspecification.\nPredictions require a tibble of new values using the same variable names as in the model.\n\nExampleExerciseSolution\n\n\nWe first examine model diagnostics.\n\naugmented &lt;- augment(fit_species)\n\nggplot(augmented, aes(x = .fitted, y = .resid, colour = species)) +\n  geom_point() +\n  geom_hline(yintercept = 0, linewidth = 0.3) +\n  labs(x = \"Fitted bill length\", y = \"Residuals\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nSummarise overall model fit.\n\nglance(fit_species)\n\n\n  \n\n\n\nWe can also use predict() to generate fitted values for the training data or new data.\nHere we predict bill length for the first three penguins in the dataset.\n\npredict(fit_species, newdata = penguins |&gt; head(3))\n\n       1        2        3 \n39.28437 37.47216 38.30856 \n\n\npredict() returns a numeric vector of fitted values corresponding to the supplied rows.\n\n\nCreate predicted bill lengths for new penguins with specified bill depth and species. Replace the blanks with the correct column names or objects.\n\n# tibble() creates a small data frame of new values\nnew_penguins &lt;- tibble(\n  bill_dep = c(17, 19),\n  species = c(\"Adelie\", \"Gentoo\")\n)\n\npredict(____, newdata = ____)\n\n\n\n\n\n\n\nWarning\n\n\n\nAlways check that your new data use the same variable names and factor levels as the original training data.\n\n\n\n\n\n\nShow solution\nnew_penguins &lt;- tibble(\n  bill_dep = c(17, 19),\n  species = c(\"Adelie\", \"Gentoo\")\n)\n\npredict(fit_species, newdata = new_penguins)\n\n\n       1        2 \n36.91455 53.10585",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/04-lm-basics.html#summarise-residual-variation",
+    "href": "tutorials/04-lm-basics.html#summarise-residual-variation",
+    "title": "5  Linear models: a minimal example",
+    "section": "5.5 Summarise residual variation",
+    "text": "5.5 Summarise residual variation\nResidual summaries quantify how well the model captures the observed data.\n\nExampleExerciseSolution\n\n\nCompute the mean and standard deviation of residuals from fit_species.\n\naugmented &lt;- augment(fit_species)\n\naugmented |&gt;\n  summarise(\n    mean_resid = mean(.resid),\n    sd_resid = sd(.resid)\n  )\n\n\n  \n\n\n\n\n\nUsing the same augmented tibble, calculate the mean absolute residual. Fill in the blanks.\n\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(___), na.rm = TRUE))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(.resid), na.rm = TRUE))",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
@@ -213,8 +273,8 @@
     "objectID": "tutorials/04-lm-basics.html#next-steps",
     "href": "tutorials/04-lm-basics.html#next-steps",
     "title": "5  Linear models: a minimal example",
-    "section": "5.4 Next steps",
-    "text": "5.4 Next steps\nYou now know how to:\n\nfit a linear model with lm()\ninterpret coefficients using broom::tidy()\ncheck assumptions with augment() and glance()\ngenerate predictions with predict()\n\nNext, experiment with interaction terms (e.g., bill_dep * species) or try using another numeric response such as body_mass.",
+    "section": "5.6 Next steps",
+    "text": "5.6 Next steps\nYou now know how to:\n\nfit a linear model with lm()\ninterpret coefficients using broom::tidy()\ncheck assumptions with augment() and glance()\ngenerate predictions with predict()\n\nNext, experiment with interaction terms (e.g., bill_dep * species) or try using another numeric response such as body_mass.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
