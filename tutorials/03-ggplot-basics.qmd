@@ -129,7 +129,7 @@ You can layer statistical summaries and customise labels to communicate the key 
 
 ### Example
 
-Below we add a smooth trend line with `geom_smooth()` and give the axes and legend clear labels.
+Add a smooth trend line with `geom_smooth()` and label the axes so the message is clear.
 
 ```{r}
 penguins |>
@@ -137,34 +137,28 @@ penguins |>
   geom_point(alpha = 0.6) +
   geom_smooth(se = FALSE) +
   labs(
-    title = "Body mass increases with flipper length",
     x = "Flipper length (mm)",
     y = "Body mass (g)",
     colour = "Species"
-  ) +
-  theme_minimal()
+  )
 ```
 
 ### Exercise
 
-Add a line layer that connects the mean body mass by species. Start by summarising the data with `dplyr`, then add a `geom_line()` layer. Replace the blanks with the appropriate function names or variables.
+Starting from the same scatter plot, add a smooth curve and a title. Replace the blanks with the correct arguments.
 
 ```{r}
 #| eval: false
 
-mean_mass <- penguins |>
-  group_by(species) |>
-  summarise(mean_mass = mean(___, na.rm = TRUE))
-
 penguins |>
-  ggplot(aes(x = species, y = body_mass)) +
-  geom_jitter(width = 0.2, alpha = 0.4) +
-  geom_line(data = mean_mass, aes(x = species, y = ____ , group = 1), colour = "#3366aa", linewidth = 1.2) +
-  labs(y = "Body mass (g)")
+  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = ____) +
+  labs(title = "____ vs ____")
 ```
 
 :::{.callout-note}
-When combining datasets in one plot, be explicit about aesthetics like `group` inside the layer where they apply.
+Using `se = FALSE` removes the shaded confidence interval when you only want the trend line.
 :::
 
 ### Solution
@@ -173,15 +167,104 @@ When combining datasets in one plot, be explicit about aesthetics like `group` i
 #| code-fold: true
 #| code-summary: "Show solution"
 
-mean_mass <- penguins |>
-  group_by(species) |>
-  summarise(mean_mass = mean(body_mass, na.rm = TRUE))
+penguins |>
+  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE) +
+  labs(title = "Flipper length vs body mass")
+```
+
+:::
+
+## Plot distributions
+
+Use histograms or density plots to examine how values are distributed.
+
+::: {.panel-tabset}
+
+### Example
+
+Overlay histograms of bill length for each species.
+
+```{r}
+penguins |>
+  ggplot(aes(x = bill_len, fill = species)) +
+  geom_histogram(position = "identity", alpha = 0.5, binwidth = 1) +
+  labs(x = "Bill length (mm)", y = "Count")
+```
+
+### Exercise
+
+Create density curves of body mass by species. Replace the blanks with the correct aesthetics.
+
+```{r}
+#| eval: false
 
 penguins |>
-  ggplot(aes(x = species, y = body_mass)) +
-  geom_jitter(width = 0.2, alpha = 0.4) +
-  geom_line(data = mean_mass, aes(x = species, y = mean_mass, group = 1), colour = "#3366aa", linewidth = 1.2) +
-  labs(y = "Body mass (g)")
+  ggplot(aes(x = ____, colour = ____)) +
+  geom_density(linewidth = 1) +
+  theme_minimal()
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+penguins |>
+  ggplot(aes(x = body_mass, colour = species)) +
+  geom_density(linewidth = 1) +
+  theme_minimal()
+```
+
+:::
+
+## Save plots to files
+
+Assign plots to objects so you can reuse or export them with `ggsave()`.
+
+::: {.panel-tabset}
+
+### Example
+
+Create a plot object and save it as a PNG.
+
+```{r}
+#| eval: false
+
+volume_plot <- penguins |>
+  ggplot(aes(x = bill_dep, y = bill_len, colour = species)) +
+  geom_point(alpha = 0.7)
+
+ggsave("volume-plot.png", plot = volume_plot, width = 6, height = 4, dpi = 300)
+```
+
+### Exercise
+
+Build a scatter plot of flipper length versus body mass, store it in `size_plot`, and save it as a PNG. Replace the blanks with the appropriate arguments.
+
+```{r}
+#| eval: false
+
+size_plot <- penguins |>
+  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +
+  geom_point()
+
+ggsave("size-plot.png", plot = size_plot, width = ____, height = ____, dpi = 300)
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+size_plot <- penguins |>
+  ggplot(aes(x = flipper_len, y = body_mass, colour = species)) +
+  geom_point()
+
+ggsave("size-plot.png", plot = size_plot, width = 6, height = 4, dpi = 300)
 ```
 
 :::

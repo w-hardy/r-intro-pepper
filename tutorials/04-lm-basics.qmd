@@ -75,6 +75,44 @@ fit_species
 
 :::
 
+## Include interaction terms
+
+Interactions let the effect of one predictor change depending on another predictor’s value.
+
+::: {.panel-tabset}
+
+### Example
+
+Fit a model with an interaction between bill depth and species.
+
+```{r}
+fit_interaction <- lm(bill_len ~ bill_dep * species, data = penguins)
+tidy(fit_interaction)
+```
+
+### Exercise
+
+Fit a model that allows the effect of bill depth to differ by sex. Replace the blanks.
+
+```{r}
+#| eval: false
+
+fit_sex <- lm(bill_len ~ bill_dep * ____, data = ____)
+tidy(fit_sex)
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+fit_sex <- lm(bill_len ~ bill_dep * sex, data = penguins)
+tidy(fit_sex)
+```
+
+:::
+
 ---
 
 ## Interpret coefficients
@@ -158,7 +196,7 @@ predict(fit_species, newdata = penguins |> head(3))
 
 ### Exercise
 
-Create predicted bill lengths for new penguins with specified bill depth and species.  
+Create predicted bill lengths for new penguins with specified bill depth and species.
 Replace the blanks with the correct column names or objects.
 
 ```{r}
@@ -170,10 +208,7 @@ new_penguins <- tibble(
   species = c("Adelie", "Gentoo")
 )
 
-pred <- predict(____, newdata = ____)
-
-new_penguins |>
-  mutate(predicted_bill_len = ____)
+predict(____, newdata = ____)
 ```
 
 :::{.callout-warning}
@@ -191,10 +226,50 @@ new_penguins <- tibble(
   species = c("Adelie", "Gentoo")
 )
 
-pred <- predict(fit_species, newdata = new_penguins)
+predict(fit_species, newdata = new_penguins)
+```
 
-new_penguins |>
-  mutate(predicted_bill_len = pred)
+:::
+
+## Summarise residual variation
+
+Residual summaries quantify how well the model captures the observed data.
+
+::: {.panel-tabset}
+
+### Example
+
+Compute the mean and standard deviation of residuals from `fit_species`.
+
+```{r}
+augmented <- augment(fit_species)
+
+augmented |>
+  summarise(
+    mean_resid = mean(.resid),
+    sd_resid = sd(.resid)
+  )
+```
+
+### Exercise
+
+Using the same `augmented` tibble, calculate the mean absolute residual. Fill in the blanks.
+
+```{r}
+#| eval: false
+
+augmented |>
+  summarise(mean_abs_resid = mean(abs(___), na.rm = TRUE))
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+augmented |>
+  summarise(mean_abs_resid = mean(abs(.resid), na.rm = TRUE))
 ```
 
 :::
