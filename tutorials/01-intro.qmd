@@ -4,6 +4,15 @@ title: "R: quick start"
 
 This tutorial helps you check your R setup and learn how to run code and explore data. You’ll use these skills in later sections.
 
+## Before you begin
+
+1. **Open RStudio.** Double-click the RStudio icon (or launch it from Posit Cloud) and wait for the Console pane to show the R version. If the console displays an error, reinstall R before continuing.
+2. **Create a script.** Select <kbd>File</kbd> → <kbd>New File</kbd> → <kbd>R Script</kbd>. This opens the Source pane where you can save your code as a reusable script. Save the file immediately using <kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd> so you can keep track of your work.
+3. **Run code.** Type `1 + 1` on a line in the Source pane and press <kbd>Ctrl/Cmd</kbd> + <kbd>Enter</kbd> (or use the **Run** button). The code should appear in the Console followed by the result. You can also type directly in the Console for quick checks.
+4. **Check your working directory.** Run `getwd()` to confirm where files will be saved. If needed, use the Files pane to navigate to your project folder and click **Set As Working Directory**.
+
+Once you are comfortable moving between the Source and Console panes, continue with installing and loading the packages you will use throughout the tutorials.
+
 
 :::{.callout-tip}
 There is a clipboard icon in the top right of each code block, you can use this to copy the code to the clipboard, which may be useful in some of the exercises. Copying does not execute the code — you’ll still need to paste and run it in your R console.
@@ -11,7 +20,7 @@ There is a clipboard icon in the top right of each code block, you can use this 
 
 ## Installing and loading packages
 
-For most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: `dplyr` for data manipulation, `ggplot2` for creating plots, and `broom` for summarising statistical models. These are installed using the `install.packages()` function.^[You can install multiple packages using one function call by using the `c()` operator to *chain* the packages together. Remember to use quote marks '"' around each package name.]
+For most of the work you do using R, you will need to use functions from packages. You install packages once, but you must load them each time you start R. For the tutorials on this site, you will need the following packages: `dplyr` for data manipulation, `ggplot2` for creating plots, and `broom` for summarising statistical models. These are installed using the `install.packages()` function.^[You can install multiple packages using one function call by using the `c()` operator to *chain* the packages together. Remember to use quote marks '"' around each package name.] If you are using a managed machine, you may need to request administrator rights or ask IT to complete this step for you.
 
 ```{r}
 #| eval: false
@@ -28,7 +37,7 @@ You only need to install each package once per version of R, but you must use li
 :::
 
 
-You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script:
+You will then need to load each of these before using them, this must be done separately for each package and is best done at the top of each script. If `library()` reports an error, restart R (Session → Restart R) and try again to ensure your packages are available:
 
 ```{r}
 #| message: false
@@ -44,7 +53,7 @@ Anything after `#` is ignored by R. Use comments to explain what your code does 
 
 ## Data
 
-For more detail on importing data, see the R4DS chapter on [data import](https://r4ds.hadley.nz/data-import.html).
+For more detail on importing data, see the R4DS chapter on [data import](https://r4ds.hadley.nz/data-import.html). The [RStudio data import cheatsheet](https://posit.co/resources/cheatsheets/read-data/) is also a handy reference when you are working with CSV, Excel, or database connections.
 
 ### Preloaded data
 
@@ -64,7 +73,7 @@ penguins |>
 ```
 
 ::: {.callout-tip}
-Use glimpse(penguins) to quickly see variable names, types, and example values.
+Use `glimpse(penguins)` to quickly see variable names, types, and example values.
 :::
 
 We can see that we have different types of data in each column. 

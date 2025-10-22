@@ -2,16 +2,24 @@
 title: "Welcome"
 ---
 
-This site contains short, practical tutorials to help PEPPER group members build skills in [R](https://cran.r-project.org/) using [RStudio](https://posit.co/products/open-source/rstudio/?sid=1) and [tidyverse packages](https://www.tidyverse.org/) in [tidyverse-style code](https://style.tidyverse.org/).
-[Here](https://rstudio-education.github.io/hopr/starting.html) is a useful guide to installing R and RStudio.
+This site contains short, practical tutorials to help PEPPER group members build skills in [R](https://cran.r-project.org/) using [RStudio](https://posit.co/products/open-source/rstudio/?sid=1) and [tidyverse packages](https://www.tidyverse.org/) in [tidyverse-style code](https://style.tidyverse.org/). The materials assume you will primarily work in RStudio, but many resources also work in any R console.
 
-Working through the tutorials here may be useful for those new to R, particularly in preparation for working through the [R for Health Technology Assessment](https://gianluca.statistica.it/books/online/r-hta/) text book if the contents of [Chapter 2: Introduction to R](https://gianluca.statistica.it/books/online/r-hta/chapters/03.software/software) is new. [R for Data Science](https://r4ds.hadley.nz/) will provide a much more comprehensive instruction on using R. 
+# Getting started with R and RStudio
+
+If you have not used R before, take a moment to set up your environment and explore RStudio. The steps below mirror what we often do when onboarding new colleagues.
+
+1. **Install R and RStudio.** Follow the [official R installation guide](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) for your operating system, then install the free [RStudio Desktop IDE](https://posit.co/download/rstudio-desktop/). The [Hands-on Programming with R “Starting out” guide](https://rstudio-education.github.io/hopr/starting.html) walks through the process for Windows, macOS, and Linux.
+2. **Open RStudio and check your setup.** Launch RStudio and confirm that the R version appears in the console pane. Try running `sessionInfo()` to verify that R and the default packages load correctly.
+3. **Take a quick tour.** RStudio’s [IDE cheat sheet](https://posit.co/resources/cheatsheets/rstudio-ide/) highlights key panes and shortcuts. The “Primers” on [Posit Cloud](https://posit.cloud/learn/primers) offer free, interactive introductions if you prefer guided lessons.
+4. **Organise your projects.** Create a dedicated folder (or RStudio Project) for these tutorials so your scripts and data stay together. The [RStudio Projects overview](https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects) explains the benefits.
+
+Working through the tutorials here may be useful for those new to R, particularly in preparation for working through the [R for Health Technology Assessment](https://gianluca.statistica.it/books/online/r-hta/) text book if the contents of [Chapter 2: Introduction to R](https://gianluca.statistica.it/books/online/r-hta/chapters/03.software/software) is new. [R for Data Science](https://r4ds.hadley.nz/) will provide a much more comprehensive instruction on using R. The [RStudio Education learning resources](https://posit.co/resources/learning-r/) and [R4DS Online Learning Community](https://www.rfordatasci.com/) are also excellent places to ask questions and find study partners.
 
 # Using each chapter
 
 Each chapter will have an introduction and sections for different actions you may wish to carry out. For each action there will be three tabs: Example, Exercise, and Solution. The example will show you how to perform the task; the exercise will provide a template, with sections missing for you to fill in as practice; and the solution will provide the solution to the exercise so you can check (a) your code and (b) your output.
 
-Start with the first chapter or browse all tutorials from the sidebar.
+Start with the first chapter or browse all tutorials from the sidebar. If you are completely new to R, begin with **R: quick start** to learn how to open RStudio, run commands, and explore data before moving on to later topics.
 
 :::{.callout-note}
 These tutorials are not meant to be comprehensive and there will also be other ways to achieve the same goal. The intention is to help people start using R for their work and perhaps find common ways of performing regular tasks. This site should develop and grow over time.
