@@ -12,6 +12,7 @@ book:
     - tutorials/02-dplyr-basics.qmd
     - tutorials/03-ggplot-basics.qmd
     - tutorials/04-lm-basics.qmd
+    - tutorials/05-logistic-basics.qmd
   page-navigation: true
   sidebar:
     search: true
