@@ -288,5 +288,65 @@
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html",
+    "href": "tutorials/05-logistic-basics.html",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "",
+    "text": "6.1 Fit a logistic regression\nUse glm() with family = binomial to model a binary outcome as a function of predictors. The coefficients are on the log-odds scale.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html#fit-a-logistic-regression",
+    "href": "tutorials/05-logistic-basics.html#fit-a-logistic-regression",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "",
+    "text": "ExampleExerciseSolution\n\n\nModel the log-odds of a penguin being male using bill depth.\n\nfit_logit &lt;- glm(sex ~ bill_dep, data = penguins_binary, family = binomial)\nfit_logit\n\n\nCall:  glm(formula = sex ~ bill_dep, family = binomial, data = penguins_binary)\n\nCoefficients:\n(Intercept)     bill_dep  \n    -7.2280       0.4219  \n\nDegrees of Freedom: 332 Total (i.e. Null);  331 Residual\nNull Deviance:      461.6 \nResidual Deviance: 412.9    AIC: 416.9\n\n\nThe intercept represents the log-odds when bill_dep equals zero; the slope shows how the log-odds change for a one-millimetre increase in bill depth.\n\n\nExtend the model by including bill length as an additional predictor. Replace the blanks with the appropriate variable names.\n\nfit_two_predictors &lt;- glm(sex ~ bill_dep + ____, data = penguins_binary, family = binomial)\nfit_two_predictors\n\n\n\n\n\n\n\nTip\n\n\n\nRemember to set family = binomial for logistic regression.\n\n\n\n\n\n\nShow solution\nfit_two_predictors &lt;- glm(sex ~ bill_dep + bill_len, data = penguins_binary, family = binomial)\nfit_two_predictors\n\n\n\nCall:  glm(formula = sex ~ bill_dep + bill_len, family = binomial, data = penguins_binary)\n\nCoefficients:\n(Intercept)     bill_dep     bill_len  \n   -24.9444       0.7672       0.2711  \n\nDegrees of Freedom: 332 Total (i.e. Null);  330 Residual\nNull Deviance:      461.6 \nResidual Deviance: 323.6    AIC: 329.6",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html#interpret-coefficients-and-odds",
+    "href": "tutorials/05-logistic-basics.html#interpret-coefficients-and-odds",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "6.2 Interpret coefficients and odds",
+    "text": "6.2 Interpret coefficients and odds\nbroom::tidy() summarises logistic regression estimates and allows conversion to odds ratios.\n\nExampleExerciseSolution\n\n\nObtain coefficient estimates and transform them to odds ratios with confidence intervals.\n\ntidy(fit_two_predictors, conf.int = TRUE, exponentiate = TRUE)\n\n\n  \n\n\n\nexponentiate = TRUE converts log-odds to odds ratios, which are easier to interpret.\n\n\nCreate a tibble of odds ratios without confidence intervals for fit_logit. Fill in the blanks.\n\ntidy(fit_logit, exponentiate = ____, conf.int = ____)\n\n\n\n\n\n\n\nNote\n\n\n\nOdds ratios above 1 increase the odds of the outcome; below 1 decrease them.\n\n\n\n\n\n\nShow solution\ntidy(fit_logit, exponentiate = TRUE, conf.int = FALSE)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html#predict-probabilities",
+    "href": "tutorials/05-logistic-basics.html#predict-probabilities",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "6.3 Predict probabilities",
+    "text": "6.3 Predict probabilities\nUse augment() with type.predict = \"response\" to compute fitted probabilities instead of log-odds.\n\nExampleExerciseSolution\n\n\nCalculate fitted probabilities for the training data and visualise them against bill depth.\n\naugmented &lt;- augment(fit_logit, type.predict = \"response\")\n\naugmented |&gt;\n  ggplot(aes(x = bill_dep, y = .fitted)) +\n  geom_point(alpha = 0.4) +\n  geom_smooth(method = \"loess\", se = FALSE) +\n  labs(x = \"Bill depth (mm)\", y = \"Predicted probability of male\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n.fitted now represents the estimated probability that a penguin is male.\n\n\nPredict the probability that a penguin with a bill depth of 18 mm is male. Replace the blanks with the correct objects.\n\nnew_penguin &lt;- tibble::tibble(bill_dep = 18)\npredict(____, newdata = new_penguin, type = \"____\")\n\n\n\n\n\n\n\nWarning\n\n\n\nEnsure the new data frame contains all predictors used in the model.\n\n\n\n\n\n\nShow solution\nnew_penguin &lt;- tibble::tibble(bill_dep = 18)\npredict(fit_logit, newdata = new_penguin, type = \"response\")\n\n\n        1 \n0.5905672",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html#evaluate-classification-performance",
+    "href": "tutorials/05-logistic-basics.html#evaluate-classification-performance",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "6.4 Evaluate classification performance",
+    "text": "6.4 Evaluate classification performance\nCompare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.\n\nExampleExerciseSolution\n\n\nClassify penguins as male when the predicted probability exceeds 0.5 and compute the proportion correctly classified.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(accuracy = mean(predicted_sex == sex))\n\n\n  \n\n\n\n\n\nCount how many penguins are misclassified by this rule. Replace the blanks.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != ____))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != sex))",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
+    "objectID": "tutorials/05-logistic-basics.html#next-steps",
+    "href": "tutorials/05-logistic-basics.html#next-steps",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "6.5 Next steps",
+    "text": "6.5 Next steps\nYou now know how to:\n\nfit logistic regression models with glm()\nconvert log-odds to interpretable odds ratios\ngenerate probability predictions and simple classification summaries\n\nNext, explore alternative link functions, add interaction terms (e.g., bill_dep * species), or try evaluating models with metrics such as AUC or precision and recall.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
   }
 ]
