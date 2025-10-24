@@ -1,0 +1,233 @@
+---
+title: "Logistic regression: modelling binary outcomes"
+---
+
+Logistic regression relates predictors to the probability of a binary outcome.
+In this chapter you will:
+
+1. Fit a logistic regression with `glm()`
+2. Interpret log-odds and probabilities with `broom`
+3. Make probability predictions for new observations
+
+:::{.callout-note}
+This section assumes:
+
+* you have loaded `dplyr`, `ggplot2`, `broom`, and `palmerpenguins`
+* your outcome variable has exactly two categories
+* you have removed rows with missing values in the outcome or predictors
+:::
+
+We focus on predicting penguin sex using bill measurements.
+
+```{r}
+#| message: false
+library(dplyr)            # Data manipulation
+library(ggplot2)          # Visualisation
+library(broom)            # Model tidying
+library(palmerpenguins)   # Data
+
+penguins_binary <- penguins |>
+  filter(!is.na(sex)) |>
+  select(sex, bill_len, bill_dep, flipper_len, species) |>
+  tidyr::drop_na()
+
+penguins_binary |>
+  count(sex)
+```
+
+---
+
+## Fit a logistic regression
+
+Use `glm()` with `family = binomial` to model a binary outcome as a function of predictors.
+The coefficients are on the log-odds scale.
+
+::: {.panel-tabset}
+
+### Example
+
+Model the log-odds of a penguin being male using bill depth.
+
+```{r}
+fit_logit <- glm(sex ~ bill_dep, data = penguins_binary, family = binomial)
+fit_logit
+```
+
+The intercept represents the log-odds when `bill_dep` equals zero; the slope shows how the log-odds change for a one-millimetre increase in bill depth.
+
+### Exercise
+
+Extend the model by including bill length as an additional predictor. Replace the blanks with the appropriate variable names.
+
+```{r}
+#| eval: false
+
+fit_two_predictors <- glm(sex ~ bill_dep + ____, data = penguins_binary, family = binomial)
+fit_two_predictors
+```
+
+:::{.callout-tip}
+Remember to set `family = binomial` for logistic regression.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+fit_two_predictors <- glm(sex ~ bill_dep + bill_len, data = penguins_binary, family = binomial)
+fit_two_predictors
+```
+
+:::
+
+---
+
+## Interpret coefficients and odds
+
+`broom::tidy()` summarises logistic regression estimates and allows conversion to odds ratios.
+
+::: {.panel-tabset}
+
+### Example
+
+Obtain coefficient estimates and transform them to odds ratios with confidence intervals.
+
+```{r}
+tidy(fit_two_predictors, conf.int = TRUE, exponentiate = TRUE)
+```
+
+`exponentiate = TRUE` converts log-odds to odds ratios, which are easier to interpret.
+
+### Exercise
+
+Create a tibble of odds ratios without confidence intervals for `fit_logit`. Fill in the blanks.
+
+```{r}
+#| eval: false
+
+tidy(fit_logit, exponentiate = ____, conf.int = ____)
+```
+
+:::{.callout-note}
+Odds ratios above 1 increase the odds of the outcome; below 1 decrease them.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+tidy(fit_logit, exponentiate = TRUE, conf.int = FALSE)
+```
+
+:::
+
+---
+
+## Predict probabilities
+
+Use `augment()` with `type.predict = "response"` to compute fitted probabilities instead of log-odds.
+
+::: {.panel-tabset}
+
+### Example
+
+Calculate fitted probabilities for the training data and visualise them against bill depth.
+
+```{r}
+augmented <- augment(fit_logit, type.predict = "response")
+
+augmented |>
+  ggplot(aes(x = bill_dep, y = .fitted)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(x = "Bill depth (mm)", y = "Predicted probability of male") +
+  theme_minimal()
+```
+
+`.fitted` now represents the estimated probability that a penguin is male.
+
+### Exercise
+
+Predict the probability that a penguin with a bill depth of 18 mm is male. Replace the blanks with the correct objects.
+
+```{r}
+#| eval: false
+
+new_penguin <- tibble::tibble(bill_dep = 18)
+predict(____, newdata = new_penguin, type = "____")
+```
+
+:::{.callout-warning}
+Ensure the new data frame contains all predictors used in the model.
+:::
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+new_penguin <- tibble::tibble(bill_dep = 18)
+predict(fit_logit, newdata = new_penguin, type = "response")
+```
+
+:::
+
+---
+
+## Evaluate classification performance
+
+Compare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.
+
+::: {.panel-tabset}
+
+### Example
+
+Classify penguins as male when the predicted probability exceeds 0.5 and compute the proportion correctly classified.
+
+```{r}
+augmented |>
+  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
+  summarise(accuracy = mean(predicted_sex == sex))
+```
+
+### Exercise
+
+Count how many penguins are misclassified by this rule. Replace the blanks.
+
+```{r}
+#| eval: false
+
+augmented |>
+  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
+  summarise(misclassified = sum(predicted_sex != ____))
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+augmented |>
+  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
+  summarise(misclassified = sum(predicted_sex != sex))
+```
+
+:::
+
+---
+
+## Next steps
+
+You now know how to:
+
+* fit logistic regression models with `glm()`
+* convert log-odds to interpretable odds ratios
+* generate probability predictions and simple classification summaries
+
+Next, explore alternative link functions, add interaction terms (e.g., `bill_dep * species`), or try evaluating models with metrics such as AUC or precision and recall.
