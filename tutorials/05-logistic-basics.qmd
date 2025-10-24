@@ -24,7 +24,6 @@ We focus on predicting penguin sex using bill measurements.
 library(dplyr)            # Data manipulation
 library(ggplot2)          # Visualisation
 library(broom)            # Model tidying
-library(palmerpenguins)   # Data
 
 penguins_binary <- penguins |>
   filter(!is.na(sex)) |>
