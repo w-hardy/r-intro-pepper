@@ -157,9 +157,71 @@ tidy(fit_species, conf.int = TRUE, conf.level = 0.95)
 
 ---
 
+## Assess model fit and compare models
+
+Use `glance()` to summarise overall model fit for linear models.  
+Key statistics include:
+
+* **`r.squared` and `adj.r.squared`**: proportion of variance explained (adjusted accounts for extra predictors).
+* **`sigma`**: residual standard error (lower values indicate tighter residuals).
+* **`AIC` and `BIC`**: information criteria for comparing models (lower is better).
+
+When comparing **nested** models (one model is a special case of the other), use `anova()` with both models to test whether the larger model improves fit.
+
+::: {.panel-tabset}
+
+### Example
+
+Compare fit summaries for two models and look at information criteria.
+
+```{r}
+bind_rows(
+  glance(fit_simple) |> mutate(model = "bill_dep"),
+  glance(fit_species) |> mutate(model = "bill_dep + species")
+) |>
+  select(model, r.squared, adj.r.squared, sigma, AIC, BIC)
+```
+
+Test whether adding `species` improves the fit relative to the simpler model.
+
+```{r}
+anova(fit_simple, fit_species)
+```
+
+### Exercise
+
+Using the same two models, extract only `AIC` and `BIC` for comparison. Replace the blanks.
+
+```{r}
+#| eval: false
+
+bind_rows(
+  glance(____) |> mutate(model = "bill_dep"),
+  glance(____) |> mutate(model = "bill_dep + species")
+) |>
+  select(model, AIC, BIC)
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+bind_rows(
+  glance(fit_simple) |> mutate(model = "bill_dep"),
+  glance(fit_species) |> mutate(model = "bill_dep + species")
+) |>
+  select(model, AIC, BIC)
+```
+
+:::
+
+---
+
 ## Check diagnostics and predict
 
-Use `augment()` for row-level diagnostics and `glance()` for overall model fit.  
+Use `augment()` for row-level diagnostics.  
 Residuals should scatter randomly around zero; systematic patterns may indicate model misspecification.  
 Predictions require a tibble of new values using the same variable names as in the model.
 
@@ -235,17 +297,39 @@ predict(fit_species, newdata = new_penguins)
 
 ## Assumption checks and common violations
 
-Linear models assume a linear mean structure, roughly constant variance, and approximately normal residuals.  
+Linear models rely on several assumptions; violations can lead to biased estimates or unreliable inference.  
 Use the diagnostic columns from `augment()` to look for these issues.
 
+**Key assumptions and what they mean:**
+
+* **Linearity**: the mean response changes linearly with each predictor (or with the linear predictor after any transformations).
+* **Independence**: observations are independent, so residuals are not correlated across rows.
+* **Constant variance (homoskedasticity)**: residual spread is roughly the same across fitted values.
+* **Normal residuals**: residuals are approximately normal, which matters most for small-sample inference.
+* **No extreme influence**: a small number of observations should not dominate the fitted line.
+
+::: {.panel-tabset}
+
+### Example
+
+Check linearity and equal variance with a residuals-versus-fitted plot, assess independence with residuals by row order, and check normality with a QQ plot.
+
 ```{r}
-augmented <- augment(fit_species)
+augmented <- augment(fit_species) |>
+  mutate(row_id = row_number())
 
 # Linearity and equal variance (no patterns or fan shapes)
 ggplot(augmented, aes(x = .fitted, y = .resid)) +
   geom_point(alpha = 0.6) +
   geom_hline(yintercept = 0, linewidth = 0.3) +
   labs(x = "Fitted bill length", y = "Residuals") +
+  theme_minimal()
+
+# Independence check (no runs or trends across row order)
+ggplot(augmented, aes(x = row_id, y = .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linewidth = 0.3) +
+  labs(x = "Row order", y = "Residuals") +
   theme_minimal()
 
 # Normality check (points should track the line)
@@ -255,6 +339,33 @@ ggplot(augmented, aes(sample = .std.resid)) +
   labs(x = "Theoretical quantiles", y = "Standardised residuals") +
   theme_minimal()
 ```
+
+### Exercise
+
+Use the same `augmented` tibble to flag potentially influential observations by sorting on Cook's distance. Replace the blanks.
+
+```{r}
+#| eval: false
+
+augmented |>
+  arrange(desc(____)) |>
+  select(.cooksd, .fitted, .resid) |>
+  head(5)
+```
+
+### Solution
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show solution"
+
+augmented |>
+  arrange(desc(.cooksd)) |>
+  select(.cooksd, .fitted, .resid) |>
+  head(5)
+```
+
+:::
 
 :::{.callout-warning}
 Examples of assumption violations to watch for:
