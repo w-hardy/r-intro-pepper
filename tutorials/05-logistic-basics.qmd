@@ -178,6 +178,40 @@ predict(fit_logit, newdata = new_penguin, type = "response")
 
 ---
 
+## Assumption checks and common violations
+
+Logistic regression assumes a linear relationship between predictors and the **log-odds**, independent observations, and no complete separation.  
+You can check calibration by comparing predicted probabilities to observed outcomes in bins.
+
+```{r}
+augmented <- augment(fit_logit, type.predict = "response") |>
+  mutate(outcome = if_else(sex == "male", 1, 0))
+
+augmented |>
+  mutate(bin = cut(bill_dep, breaks = 6)) |>
+  group_by(bin) |>
+  summarise(
+    mean_prob = mean(.fitted),
+    mean_resid = mean(outcome - .fitted),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = mean_prob, y = mean_resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linewidth = 0.3) +
+  labs(x = "Mean predicted probability", y = "Mean residual (observed - predicted)") +
+  theme_minimal()
+```
+
+:::{.callout-warning}
+Examples of assumption violations to watch for:
+
+* **Systematic trends** in binned residuals (nonlinearity on the log-odds scale).
+* **Complete separation** (model warnings about fitted probabilities of 0 or 1).
+* **Extreme leverage or influence** (a small number of points dominating the fit).
+:::
+
+---
+
 ## Evaluate classification performance
 
 Compare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.
