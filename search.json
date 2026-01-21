@@ -270,11 +270,21 @@
     ]
   },
   {
+    "objectID": "tutorials/04-lm-basics.html#assumption-checks-and-common-violations",
+    "href": "tutorials/04-lm-basics.html#assumption-checks-and-common-violations",
+    "title": "5  Linear models: a minimal example",
+    "section": "5.5 Assumption checks and common violations",
+    "text": "5.5 Assumption checks and common violations\nLinear models assume a linear mean structure, roughly constant variance, and approximately normal residuals.\nUse the diagnostic columns from augment() to look for these issues.\n\naugmented &lt;- augment(fit_species)\n\n# Linearity and equal variance (no patterns or fan shapes)\nggplot(augmented, aes(x = .fitted, y = .resid)) +\n  geom_point(alpha = 0.6) +\n  geom_hline(yintercept = 0, linewidth = 0.3) +\n  labs(x = \"Fitted bill length\", y = \"Residuals\") +\n  theme_minimal()\n\n\n\n\n\n\n\n# Normality check (points should track the line)\nggplot(augmented, aes(sample = .std.resid)) +\n  stat_qq() +\n  stat_qq_line() +\n  labs(x = \"Theoretical quantiles\", y = \"Standardised residuals\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nExamples of assumption violations to watch for:\n\nCurvature in the residual plot (suggests a missing nonlinear term).\nFunnel or fan shapes in residual spread (heteroskedasticity).\nHeavy tails or S-shaped QQ plot (non-normal residuals).\nLarge Cook’s distance values (influential observations).",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
+    ]
+  },
+  {
     "objectID": "tutorials/04-lm-basics.html#summarise-residual-variation",
     "href": "tutorials/04-lm-basics.html#summarise-residual-variation",
     "title": "5  Linear models: a minimal example",
-    "section": "5.5 Summarise residual variation",
-    "text": "5.5 Summarise residual variation\nResidual summaries quantify how well the model captures the observed data.\n\nExampleExerciseSolution\n\n\nCompute the mean and standard deviation of residuals from fit_species.\n\naugmented &lt;- augment(fit_species)\n\naugmented |&gt;\n  summarise(\n    mean_resid = mean(.resid),\n    sd_resid = sd(.resid)\n  )\n\n\n  \n\n\n\n\n\nUsing the same augmented tibble, calculate the mean absolute residual. Fill in the blanks.\n\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(___), na.rm = TRUE))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(.resid), na.rm = TRUE))",
+    "section": "5.6 Summarise residual variation",
+    "text": "5.6 Summarise residual variation\nResidual summaries quantify how well the model captures the observed data.\n\nExampleExerciseSolution\n\n\nCompute the mean and standard deviation of residuals from fit_species.\n\naugmented &lt;- augment(fit_species)\n\naugmented |&gt;\n  summarise(\n    mean_resid = mean(.resid),\n    sd_resid = sd(.resid)\n  )\n\n\n  \n\n\n\n\n\nUsing the same augmented tibble, calculate the mean absolute residual. Fill in the blanks.\n\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(___), na.rm = TRUE))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  summarise(mean_abs_resid = mean(abs(.resid), na.rm = TRUE))",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
@@ -283,8 +293,8 @@
     "objectID": "tutorials/04-lm-basics.html#next-steps",
     "href": "tutorials/04-lm-basics.html#next-steps",
     "title": "5  Linear models: a minimal example",
-    "section": "5.6 Next steps",
-    "text": "5.6 Next steps\nYou now know how to:\n\nfit a linear model with lm()\ninterpret coefficients using broom::tidy()\ncheck assumptions with augment() and glance()\ngenerate predictions with predict()\n\nNext, experiment with interaction terms (e.g., bill_dep * species) or try using another numeric response such as body_mass.",
+    "section": "5.7 Next steps",
+    "text": "5.7 Next steps\nYou now know how to:\n\nfit a linear model with lm()\ninterpret coefficients using broom::tidy()\ncheck assumptions with augment() and glance()\ngenerate predictions with predict()\n\nNext, experiment with interaction terms (e.g., bill_dep * species) or try using another numeric response such as body_mass.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Linear models: a minimal example</span>"
     ]
@@ -330,11 +340,21 @@
     ]
   },
   {
+    "objectID": "tutorials/05-logistic-basics.html#assumption-checks-and-common-violations",
+    "href": "tutorials/05-logistic-basics.html#assumption-checks-and-common-violations",
+    "title": "6  Logistic regression: modelling binary outcomes",
+    "section": "6.4 Assumption checks and common violations",
+    "text": "6.4 Assumption checks and common violations\nLogistic regression assumes a linear relationship between predictors and the log-odds, independent observations, and no complete separation.\nYou can check calibration by comparing predicted probabilities to observed outcomes in bins.\n\naugmented &lt;- augment(fit_logit, type.predict = \"response\") |&gt;\n  mutate(outcome = if_else(sex == \"male\", 1, 0))\n\naugmented |&gt;\n  mutate(bin = cut(bill_dep, breaks = 6)) |&gt;\n  group_by(bin) |&gt;\n  summarise(\n    mean_prob = mean(.fitted),\n    mean_resid = mean(outcome - .fitted),\n    .groups = \"drop\"\n  ) |&gt;\n  ggplot(aes(x = mean_prob, y = mean_resid)) +\n  geom_point() +\n  geom_hline(yintercept = 0, linewidth = 0.3) +\n  labs(x = \"Mean predicted probability\", y = \"Mean residual (observed - predicted)\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nExamples of assumption violations to watch for:\n\nSystematic trends in binned residuals (nonlinearity on the log-odds scale).\nComplete separation (model warnings about fitted probabilities of 0 or 1).\nExtreme leverage or influence (a small number of points dominating the fit).",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
+    ]
+  },
+  {
     "objectID": "tutorials/05-logistic-basics.html#evaluate-classification-performance",
     "href": "tutorials/05-logistic-basics.html#evaluate-classification-performance",
     "title": "6  Logistic regression: modelling binary outcomes",
-    "section": "6.4 Evaluate classification performance",
-    "text": "6.4 Evaluate classification performance\nCompare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.\n\nExampleExerciseSolution\n\n\nClassify penguins as male when the predicted probability exceeds 0.5 and compute the proportion correctly classified.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(accuracy = mean(predicted_sex == sex))\n\n\n  \n\n\n\n\n\nCount how many penguins are misclassified by this rule. Replace the blanks.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != ____))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != sex))",
+    "section": "6.5 Evaluate classification performance",
+    "text": "6.5 Evaluate classification performance\nCompare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.\n\nExampleExerciseSolution\n\n\nClassify penguins as male when the predicted probability exceeds 0.5 and compute the proportion correctly classified.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(accuracy = mean(predicted_sex == sex))\n\n\n  \n\n\n\n\n\nCount how many penguins are misclassified by this rule. Replace the blanks.\n\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != ____))\n\n\n\n\n\nShow solution\naugmented |&gt;\n  mutate(predicted_sex = if_else(.fitted &gt;= 0.5, \"male\", \"female\")) |&gt;\n  summarise(misclassified = sum(predicted_sex != sex))",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
     ]
@@ -343,8 +363,8 @@
     "objectID": "tutorials/05-logistic-basics.html#next-steps",
     "href": "tutorials/05-logistic-basics.html#next-steps",
     "title": "6  Logistic regression: modelling binary outcomes",
-    "section": "6.5 Next steps",
-    "text": "6.5 Next steps\nYou now know how to:\n\nfit logistic regression models with glm()\nconvert log-odds to interpretable odds ratios\ngenerate probability predictions and simple classification summaries\n\nNext, explore alternative link functions, add interaction terms (e.g., bill_dep * species), or try evaluating models with metrics such as AUC or precision and recall.",
+    "section": "6.6 Next steps",
+    "text": "6.6 Next steps\nYou now know how to:\n\nfit logistic regression models with glm()\nconvert log-odds to interpretable odds ratios\ngenerate probability predictions and simple classification summaries\n\nNext, explore alternative link functions, add interaction terms (e.g., bill_dep * species), or try evaluating models with metrics such as AUC or precision and recall.",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Logistic regression: modelling binary outcomes</span>"
     ]
