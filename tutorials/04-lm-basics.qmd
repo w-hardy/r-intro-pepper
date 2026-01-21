@@ -231,6 +231,40 @@ predict(fit_species, newdata = new_penguins)
 
 :::
 
+---
+
+## Assumption checks and common violations
+
+Linear models assume a linear mean structure, roughly constant variance, and approximately normal residuals.  
+Use the diagnostic columns from `augment()` to look for these issues.
+
+```{r}
+augmented <- augment(fit_species)
+
+# Linearity and equal variance (no patterns or fan shapes)
+ggplot(augmented, aes(x = .fitted, y = .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linewidth = 0.3) +
+  labs(x = "Fitted bill length", y = "Residuals") +
+  theme_minimal()
+
+# Normality check (points should track the line)
+ggplot(augmented, aes(sample = .std.resid)) +
+  stat_qq() +
+  stat_qq_line() +
+  labs(x = "Theoretical quantiles", y = "Standardised residuals") +
+  theme_minimal()
+```
+
+:::{.callout-warning}
+Examples of assumption violations to watch for:
+
+* **Curvature** in the residual plot (suggests a missing nonlinear term).
+* **Funnel or fan shapes** in residual spread (heteroskedasticity).
+* **Heavy tails or S-shaped QQ plot** (non-normal residuals).
+* **Large Cook's distance values** (influential observations).
+:::
+
 ## Summarise residual variation
 
 Residual summaries quantify how well the model captures the observed data.
