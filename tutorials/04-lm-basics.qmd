@@ -243,10 +243,6 @@ ggplot(augmented, aes(x = .fitted, y = .resid, colour = species)) +
 
 Summarise overall model fit.
 
-```{r}
-glance(fit_species)
-```
-
 We can also use `predict()` to generate fitted values for the training data or new data.  
 Here we predict bill length for the first three penguins in the dataset.
 
@@ -307,6 +303,14 @@ Use the diagnostic columns from `augment()` to look for these issues.
 * **Constant variance (homoskedasticity)**: residual spread is roughly the same across fitted values.
 * **Normal residuals**: residuals are approximately normal, which matters most for small-sample inference.
 * **No extreme influence**: a small number of observations should not dominate the fitted line.
+
+**What counts as a likely violation:**
+
+* **Linearity**: clear curvature in the residuals-versus-fitted plot (a U-shape or systematic bend).
+* **Independence**: residuals show runs/trends across row order (clusters above or below zero).
+* **Constant variance**: a funnel or fan shape in residual spread as fitted values increase.
+* **Normal residuals**: an S-shaped QQ plot or strong tail departures from the reference line.
+* **Influence**: unusually large Cook’s distance values (as a rule of thumb, look for points above `4 / n`).
 
 ::: {.panel-tabset}
 
