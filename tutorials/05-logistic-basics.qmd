@@ -12,7 +12,7 @@ In this chapter you will:
 :::{.callout-note}
 This section assumes:
 
-* you have loaded `dplyr`, `ggplot2`, `broom`, and `palmerpenguins`
+* you have loaded `dplyr`, `ggplot2`, `broom`, `yardstick`, and `palmerpenguins`
 * your outcome variable has exactly two categories
 * you have removed rows with missing values in the outcome or predictors
 :::
@@ -24,6 +24,7 @@ We focus on predicting penguin sex using bill measurements.
 library(dplyr)            # Data manipulation
 library(ggplot2)          # Visualisation
 library(broom)            # Model tidying
+library(yardstick)        # Classification metrics
 
 penguins_binary <- penguins |>
   filter(!is.na(sex)) |>
@@ -340,30 +341,52 @@ Examples of assumption violations to watch for:
 
 ## Evaluate classification performance
 
-Compare predicted probabilities to the observed classes using a threshold (e.g., 0.5) and calculate accuracy.
+Compare predicted probabilities to observed classes using a threshold (e.g., 0.5), then summarise multiple metrics with `yardstick`.
+
+:::{.callout-note}
+Accuracy alone can be misleading when classes are imbalanced, so always inspect sensitivity (recall), specificity, and precision alongside it.
+:::
 
 ::: {.panel-tabset}
 
 ### Example
 
-Classify penguins as male when the predicted probability exceeds 0.5 and compute the proportion correctly classified.
+Classify penguins as male when the predicted probability exceeds 0.5, then compute several performance metrics.
 
 ```{r}
-augmented |>
-  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
-  summarise(accuracy = mean(predicted_sex == sex))
+classified <- augmented |>
+  mutate(
+    sex = factor(sex, levels = c("female", "male")),
+    predicted_sex = if_else(.fitted >= 0.5, "male", "female"),
+    predicted_sex = factor(predicted_sex, levels = c("female", "male"))
+  )
+
+classified |>
+  metrics(truth = sex, estimate = predicted_sex, event_level = "second")
+
+classified |>
+  roc_auc(truth = sex, .fitted, event_level = "second")
 ```
+
+`event_level = "second"` treats `"male"` (the second factor level) as the event class for sensitivity/recall and related metrics.
+
+:::{.callout-tip}
+These are in-sample metrics, so they are usually optimistic. For model selection, prefer evaluating metrics on a held-out test set or via cross-validation.
+:::
 
 ### Exercise
 
-Count how many penguins are misclassified by this rule. Replace the blanks.
+Compute accuracy, sensitivity, and specificity from the classified data frame. Replace the blanks.
 
 ```{r}
 #| eval: false
 
-augmented |>
-  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
-  summarise(misclassified = sum(predicted_sex != ____))
+classified |>
+  metric_set(accuracy, sens, spec)(
+    truth = ____,
+    estimate = ____,
+    event_level = "second"
+  )
 ```
 
 ### Solution
@@ -372,9 +395,12 @@ augmented |>
 #| code-fold: true
 #| code-summary: "Show solution"
 
-augmented |>
-  mutate(predicted_sex = if_else(.fitted >= 0.5, "male", "female")) |>
-  summarise(misclassified = sum(predicted_sex != sex))
+classified |>
+  metric_set(accuracy, sens, spec)(
+    truth = sex,
+    estimate = predicted_sex,
+    event_level = "second"
+  )
 ```
 
 :::
@@ -387,6 +413,6 @@ You now know how to:
 
 * fit logistic regression models with `glm()`
 * convert log-odds to interpretable odds ratios
-* generate probability predictions and simple classification summaries
+* generate probability predictions and evaluate classifiers with multiple `yardstick` metrics
 
-Next, explore alternative link functions, add interaction terms (e.g., `bill_dep * species`), or try evaluating models with metrics such as AUC or precision and recall.
+Next, explore alternative link functions, add interaction terms (e.g., `bill_dep * species`), and tune classification thresholds based on the metric that best matches your analysis goal.
