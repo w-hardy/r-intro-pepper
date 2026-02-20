@@ -383,8 +383,8 @@ Compute accuracy, sensitivity, and specificity from the classified data frame. R
 
 classified |>
   metric_set(accuracy, sens, spec)(
-    truth = ____ ,
-    estimate = ____ ,
+    truth = ____,
+    estimate = ____,
     event_level = "second"
   )
 ```
