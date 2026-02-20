@@ -344,7 +344,7 @@ Examples of assumption violations to watch for:
 Compare predicted probabilities to observed classes using a threshold (e.g., 0.5), then summarise multiple metrics with `yardstick`.
 
 :::{.callout-note}
-Accuracy alone can be misleading when classes are imbalanced, so always inspect sensitivity, specificity, precision, and recall alongside it.
+Accuracy alone can be misleading when classes are imbalanced, so always inspect sensitivity (recall), specificity, and precision alongside it.
 :::
 
 ::: {.panel-tabset}
